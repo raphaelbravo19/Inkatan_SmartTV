@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!--<link rel="stylesheet" href="./CSS/style.css">-->
+
+	<script type="text/javascript" src="../../Logic/jquery-1.11.0.min.js"></script>
+	<script src="../../Logic/conect.js" charset="utf-8"></script>
+	
+	
+	<script src="../../webOSTVjs-1.1.0/webOSTV.js" charset="utf-8"></script>
+	<script src="../../webOSTVjs-1.1.0/webOSTV-dev.js" charset="utf-8"></script>
+	<style>
+		
+	@font-face {
+    font-family: Kirsty;
+    src: url(../../CSS/fonts/kirsty.regular.ttf);
+ 	}
+	body {
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		height: 100%;
+		background-color: white;
+	}
+	.container{
+		position: absolute;
+		left: 0;
+		right: 0;
+		top:0;
+		bottom: 0;
+		margin:auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	.titleContainer{
+		display: flex;
+		align-items: center;
+		flex-direction: column
+	}
+	
+	.title{
+		font-family: Kirsty;
+		color:black;
+		font-size: 2.3rem
+	}
+	.uid{
+		font-family: Kirsty;
+		color:black;
+		font-size: 1.7rem;
+		position: absolute;
+		right: 5rem;
+		display: flex;
+		justify-content: center;
+		margin-top: 1.4rem;
+	}
+	.leftTitle{
+		font-family: Kirsty;
+		color:black;
+		position: absolute;
+		left: 2rem;
+		top: 2rem;
+		font-size: 4rem
+	}
+	#playersContainer{
+		display: flex;
+		width: 40%;
+		padding: 2rem;
+		margin-top: 2rem;
+		flex-direction: column;
+		background: #ffeca9;
+	}
+	.player{
+		font-family: Kirsty;
+		color:black;
+		font-size: 1.4rem;
+		margin-bottom: 1rem
+	}
+	.avatar{
+		background: green;
+		height: 12rem;
+		width: 12rem;
+		border-radius: 6rem;
+	}
+	.playerNumber{
+		margin-top: 1.5rem;
+		font-family: Kirsty;
+		color:black;
+		font-size: 1.8rem
+	}
+	.nextBtn{
+		font-family: Kirsty;
+		color:white;
+		position: absolute;
+		padding:1rem;
+		bottom: 2rem;
+		right: 2rem;
+		font-size: 4rem;
+		background:green;
+	}
+	</style>
+	<script>
+		const addHtml=[`<div id="player3" class="itemPlayer">
+				<div  class="avatar" style="background: #d017ff">
+
+				</div>
+				<div class="playerNumber">3</div>
+			</div>`,`<div id="player4" class="itemPlayer">
+				<div class="avatar" style="background: #ff682e">
+
+				</div>
+				<div class="playerNumber">4</div>
+			</div>`]
+		let lenPlayers=2
+		
+		function addPlayer(){
+			if(lenPlayers<4){
+				let players = $('#playersContainer')
+				
+				players.append(addHtml[lenPlayers-2])
+				lenPlayers++
+			}
+		}
+		function removePlayer(){
+			if(lenPlayers>2){
+				let players = $('#playersContainer')
+				
+				$(`#player${lenPlayers}`).remove()
+				lenPlayers--
+			}
+		}
+	</script>
+</head>
+
+<body>
+	<div class="container">
+		<div onclick="addPlayer()" class="leftTitle">Inkatan</div>
+		<div class="titleContainer">
+			<div class="title">Lista de</div>
+			<div class="title">Jugadores</div>
+			<div class="uid">ID: 55500</div>
+		</div>
+		<div id="playersContainer">
+			<div class="player">1. PLAYER 1</div>
+			<div class="player">2. PLAYER 2</div>
+		</div>
+		<div class="nextBtn">
+			Next
+		</div>
+	</div>
+</body>
+
+</html>
