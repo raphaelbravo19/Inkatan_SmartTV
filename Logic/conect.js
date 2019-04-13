@@ -65,31 +65,30 @@ function create() {
     game.physics.enable(player, Phaser.Physics.ARCADE);*/
 
 }
-function addPlayer(){
-    if(lenPlayers<4){
-        let players = $('#playersContainer')
-        
-        players.append(addHtml[lenPlayers-2])
-        lenPlayers++
-    }
-}
-function removePlayer(){
-    if(lenPlayers>2){
-        let players = $('#playersContainer')
-        
-        $(`#player${lenPlayers}`).remove()
-        lenPlayers--
-    }
+function parseUrl(url,path,parameters){
+    let index = url.indexOf('?')
+    let local = url.indexOf('Inkatan')
+    let urlParam=parameters.length==0?'':parameters.map(item=>{return(
+        `&${item.name}=${item.value}`
+    )})
+    return url.substr(0,local+8)+path+url.substr(index)+urlParam
 }
 function update(cursor) {
     //console.log(1)
         if(typeof(cursor)=="string"){
             //$( ".messages" ).append(`<h3>${cursor}</h3>` );
             //alert(1)
-            switch(cursor){
-                case "start":$(location).attr('href', "./Inkatan/SelectPlayers/?url=" + ipConnected);
-                case "up":addPlayer();
-                case "down":removePlayer();
+            if(cursor=="start"){
+                $(location).attr('href', "./Inkatan/SelectPlayers/?url=" + ipConnected);
+            }else if(cursor=="up"){
+                addPlayer()
+            }else if(cursor=="down"){
+                removePlayer()
+            }else if(cursor=="next"){
+                location.replace(parseUrl(location.href,"ListPlayers/",
+                [
+                    {name:"nplayer", value: lenPlayers.toString()}
+                ]))
             }
             
             console.log(cursor)

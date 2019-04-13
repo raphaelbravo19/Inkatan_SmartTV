@@ -102,49 +102,27 @@
 	}
 	</style>
 	<script>
-		const addHtml=[`<div id="player3" class="itemPlayer">
-				<div  class="avatar" style="background: #d017ff">
-
-				</div>
-				<div class="playerNumber">3</div>
-			</div>`,`<div id="player4" class="itemPlayer">
-				<div class="avatar" style="background: #ff682e">
-
-				</div>
-				<div class="playerNumber">4</div>
-			</div>`]
-		let lenPlayers=2
-		
-		function addPlayer(){
-			if(lenPlayers<4){
-				let players = $('#playersContainer')
-				
-				players.append(addHtml[lenPlayers-2])
-				lenPlayers++
+		let val=getParameterByName("nplayer")
+		let players = $('#playersContainer')
+		for(let i=1;i<val;i++){
+			console.log(players)
+			players.append(
+			`<div id="player${i+1}" class="player">${i+1}. Waiting...</div>`
+			)
 			}
-		}
-		function removePlayer(){
-			if(lenPlayers>2){
-				let players = $('#playersContainer')
-				
-				$(`#player${lenPlayers}`).remove()
-				lenPlayers--
-			}
-		}
 	</script>
 </head>
 
 <body>
 	<div class="container">
-		<div onclick="addPlayer()" class="leftTitle">Inkatan</div>
+		<div class="leftTitle">Inkatan</div>
 		<div class="titleContainer">
 			<div class="title">Lista de</div>
 			<div class="title">Jugadores</div>
 			<div class="uid">ID: 55500</div>
 		</div>
 		<div id="playersContainer">
-			<div class="player">1. PLAYER 1</div>
-			<div class="player">2. PLAYER 2</div>
+			<div id="player1" class="player">1. PLAYER 1</div>
 		</div>
 		<div class="nextBtn">
 			Next
