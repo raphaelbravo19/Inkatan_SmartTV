@@ -37,10 +37,10 @@ $(document).ready(function () {
 });
 //GAME DEVELOPMENT
 
-var game = new Phaser.Game(1920, 1080, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+//var game = new Phaser.Game(1920, 1080, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
-    game.load.spritesheet('player', '../Assets/sprites/PersonajeSpriteC.png', 192, 240, 22);
+    //game.load.spritesheet('player', '../Assets/sprites/PersonajeSpriteC.png', 192, 240, 22);
 }
 
 var cursors;
@@ -84,11 +84,48 @@ function update(cursor) {
                 addPlayer()
             }else if(cursor=="down"){
                 removePlayer()
-            }else if(cursor=="next"){
+            }else if(cursor=="next-list"){
                 location.replace(parseUrl(location.href,"ListPlayers/",
                 [
                     {name:"nplayer", value: lenPlayers.toString()}
                 ]))
+            }else if(cursor.indexOf("player")!=-1){
+
+                let newName=cursor.substr(cursor.indexOf("player")+7)
+                console.log(newName)
+                playerReady(newName).bind(returnContext())
+                
+            }
+            else if(cursor=="next-game"){
+
+                location.replace(parseUrl(location.href,"GameMode/",
+                [
+                ]))
+                
+            }
+            else if(cursor=="expansion"){
+
+                location.replace(parseUrl(location.href,"ModeExpansion/",
+                [
+                ]))
+                
+            }
+            else if(cursor=="puntos"){
+                location.replace(parseUrl(location.href,"ModePoints/",
+                [
+                ]))
+            }
+            else if(cursor=="mas"){
+                modificarExpansion(true)
+            }
+            else if(cursor=="menos"){
+                modificarExpansion(false)
+            }
+            else if(cursor=="sumar"){
+                modificarPuntos(true)
+            }
+            else if(cursor=="restar"){
+                modificarPuntos(false)
             }
             
             console.log(cursor)

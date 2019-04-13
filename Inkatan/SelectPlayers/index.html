@@ -2,126 +2,18 @@
 <html>
 
 <head>
-	<!--<link rel="stylesheet" href="./CSS/style.css">-->
-
+	<link rel="stylesheet" href="../../Styles/SelectPlayers/style.css">
 	<script type="text/javascript" src="../../Logic/jquery-1.11.0.min.js"></script>
 	<script src="../../Logic/conect.js" charset="utf-8"></script>
-	
-	
 	<script src="../../webOSTVjs-1.1.0/webOSTV.js" charset="utf-8"></script>
 	<script src="../../webOSTVjs-1.1.0/webOSTV-dev.js" charset="utf-8"></script>
-	<style>
-		
-	@font-face {
-    font-family: Kirsty;
-    src: url(../../CSS/fonts/kirsty.regular.ttf);
- 	}
-	body {
-		padding: 0;
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		background-color: white;
-	}
-	.container{
-		position: absolute;
-		left: 0;
-		right: 0;
-		top:0;
-		bottom: 0;
-		margin:auto;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-	.title{
-		font-family: Kirsty;
-		color:black;
-		font-size: 4rem
-	}
-	.leftTitle{
-		font-family: Kirsty;
-		color:black;
-		position: absolute;
-		left: 2rem;
-		top: 2rem;
-		font-size: 4rem
-	}
-	#playersContainer{
-		display: flex;
-		flex-direction: row;
-	}
-	.itemPlayer{
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-		margin-top: 2rem;
-		margin-left: 1rem;
-		margin-right: 1rem;
-	}
-	.avatar{
-		background: green;
-		height: 12rem;
-		width: 12rem;
-		border-radius: 6rem;
-	}
-	.playerNumber{
-		margin-top: 1.5rem;
-		font-family: Kirsty;
-		color:black;
-		font-size: 1.8rem
-	}
-	.nextBtn{
-		font-family: Kirsty;
-		color:white;
-		position: absolute;
-		padding:1rem;
-		bottom: 2rem;
-		right: 2rem;
-		font-size: 4rem;
-		background:green;
-	}
-	</style>
-	<script>
-		
-		const addHtml=[`<div id="player3" class="itemPlayer">
-				<div  class="avatar" style="background: #d017ff">
-
-				</div>
-				<div class="playerNumber">3</div>
-			</div>`,`<div id="player4" class="itemPlayer">
-				<div class="avatar" style="background: #ff682e">
-
-				</div>
-				<div class="playerNumber">4</div>
-			</div>`]
-		let lenPlayers=2
-		//alert(location.href)
-		
-		function addPlayer(hola){
-			if(lenPlayers<4){
-				let players = $('#playersContainer')
-				
-				players.append(addHtml[lenPlayers-2])
-				lenPlayers++
-			}
-		}
-		function removePlayer(){
-			if(lenPlayers>2){
-				let players = $('#playersContainer')
-				
-				$(`#player${lenPlayers}`).remove()
-				lenPlayers--
-			}
-		}
-	</script>
+	<script type="text/javascript" src="../../Scripts/SelectPlayers/app.js"></script>
 </head>
 
 <body>
 	<div class="container">
-		<div onclick="addPlayer()" class="leftTitle">Inkatan</div>
-		<div onclick="removePlayer()" class="title">Jugadores</div>
+		<div  class="leftTitle">Inkatan</div>
+		<div class="title">Jugadores</div>
 		<div id="playersContainer">
 			<div class="itemPlayer">
 				<div class="avatar" >
@@ -137,8 +29,10 @@
 			</div>
 			
 		</div>
-		<div class="nextBtn">
-			Next
+		<div class="containerRombo">
+				<div class="triangulo"></div>	
+				<div class="trianguloRotate"></div>	
+				<div class="contenido">CONTINUAR</div>
 		</div>
 	</div>
 </body>

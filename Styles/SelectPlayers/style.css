@@ -1,0 +1,107 @@
+@font-face {
+    font-family: Kirsty;
+    src: url(../fonts/kirsty.regular.ttf);
+ 	}
+	 body {
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		height: 100%;
+		background-color: white;
+	}
+	.container{
+		position: absolute;
+		left: 0;
+		right: 0;
+		top:0;
+		bottom: 0;
+		margin:auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	.title{
+		font-family: Kirsty;
+		color:black;
+		font-size: 4rem
+	}
+	.leftTitle{
+		font-family: Kirsty;
+		color:black;
+		position: absolute;
+		left: 2rem;
+		top: 2rem;
+		font-size: 4rem
+	}
+	#playersContainer{
+		display: flex;
+		flex-direction: row;
+	}
+	.itemPlayer{
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		margin-top: 2rem;
+		margin-left: 1rem;
+		margin-right: 1rem;
+	}
+	.avatar{
+		background: green;
+		height: 12rem;
+		width: 12rem;
+		border-radius: 6rem;
+	}
+	.playerNumber{
+		margin-top: 1.5rem;
+		font-family: Kirsty;
+		color:black;
+		font-size: 1.8rem
+	}
+	.nextBtn{
+		font-family: Kirsty;
+		color:white;
+		position: absolute;
+		padding:1rem;
+		bottom: 2rem;
+		right: 2rem;
+		font-size: 4rem;
+		background:green;
+	}
+	.contenido{
+		
+		text-align:center;
+	  font-size: 1.7rem;
+	   	font-family: Kirsty;
+		color:white;
+		top: 50%;
+		transform: translate(0,-50%);
+		width: 100%;
+		text-align: center;
+		position: absolute;
+		text-transform:uppercase;
+	  }
+	  .containerRombo{
+		  position: absolute;
+		  bottom: 0rem;
+		  right: 2rem;
+	  }
+		.triangulo {
+				width: 0;
+				height: 0;
+				border-right: 8rem solid transparent;
+				border-top: 5rem solid transparent;
+				border-left: 8rem solid transparent;
+				border-bottom: 5rem solid #0c7cba;
+		}
+	 
+   .trianguloRotate { 
+		width: 0;
+		height: 0;
+		border-right: 8rem solid transparent;
+		border-top: 5rem solid transparent;
+		border-left: 8rem solid transparent;
+		border-bottom: 5rem solid #0c7cba;
+		transform: rotate(180deg);
+	 }
+	
