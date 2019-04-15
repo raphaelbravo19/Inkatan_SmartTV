@@ -15,14 +15,14 @@ function connect(url) {
 
     };
 
-    webSocket.ws.onclose = function () {
-    };
+    webSocket.ws.onclose = function () {};
 
 };
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"); results = regex
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+    results = regex
         .exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(
         /\+/g, " "));
@@ -32,7 +32,7 @@ function getParameterByName(name) {
 $(document).ready(function () {
     var url = getParameterByName('url');
     console.log(url);
-    
+
     connect(url);
 });
 //GAME DEVELOPMENT
@@ -49,7 +49,14 @@ var left;
 var right;
 
 function create() {
-    
+
+    /*game.stage.backgroundColor = '#916961';
+    /*game.stage.backgroundColor = '#916961';
+    /*game.stage.backgroundColor = '#916961';
+    /*game.stage.backgroundColor = '#916961';
+    /*game.stage.backgroundColor = '#916961';
+    /*game.stage.backgroundColor = '#916961';
+    /*game.stage.backgroundColor = '#916961';
     /*game.stage.backgroundColor = '#916961';
     
     player = game.add.sprite(0, 0, 'player');
@@ -63,73 +70,105 @@ function create() {
     // player.animations.add('stop', [0], 10, false)
 
     game.physics.enable(player, Phaser.Physics.ARCADE);*/
+    player = game.add.sprite(0, 0, 'player');
+    player.smoothed = false;
+    player.scale.set(1);
+
+    left = player.animations.add('left', [12, 13, 14, 15, 16, 17], 10, false);
+    right = player.animations.add('right', [3, 4, 5, 6, 7], 10, false);
+    player.animations.add('up', [5, 6, 7], 10, false);
+    player.animations.add('down', [8, 9, 10], 10, false);
+    // player.animations.add('stop', [0], 10, false)
+
+    game.physics.enable(player, Phaser.Physics.ARCADE);*/
+    player = game.add.sprite(0, 0, 'player');
+    player.smoothed = false;
+    player.scale.set(1);
+
+    left = player.animations.add('left', [12, 13, 14, 15, 16, 17], 10, false);
+    right = player.animations.add('right', [3, 4, 5, 6, 7], 10, false);
+    player.animations.add('up', [5, 6, 7], 10, false);
+    player.animations.add('down', [8, 9, 10], 10, false);
+    // player.animations.add('stop', [0], 10, false)
+
+    game.physics.enable(player, Phaser.Physics.ARCADE);*/
+    player = game.add.sprite(0, 0, 'player');
+    player.smoothed = false;
+    player.scale.set(1);
+
+    left = player.animations.add('left', [12, 13, 14, 15, 16, 17], 10, false);
+    right = player.animations.add('right', [3, 4, 5, 6, 7], 10, false);
+    player.animations.add('up', [5, 6, 7], 10, false);
+    player.animations.add('down', [8, 9, 10], 10, false);
+    // player.animations.add('stop', [0], 10, false)
+
+    game.physics.enable(player, Phaser.Physics.ARCADE);*/
 
 }
-function parseUrl(url,path,parameters){
+
+function parseUrl(url, path, parameters) {
     let index = url.indexOf('?')
     let local = url.indexOf('Inkatan')
-    let urlParam=parameters.length==0?'':parameters.map(item=>{return(
-        `&${item.name}=${item.value}`
-    )})
-    return url.substr(0,local+8)+path+url.substr(index)+urlParam
+    let urlParam = parameters.length == 0 ? '' : parameters.map(item => {
+        return (
+            `&${item.name}=${item.value}`
+        )
+    })
+    return url.substr(0, local + 8) + path + url.substr(index) + urlParam
 }
+
 function update(cursor) {
     //console.log(1)
-        if(typeof(cursor)=="string"){
-            //$( ".messages" ).append(`<h3>${cursor}</h3>` );
-            //alert(1)
-            if(cursor=="start"){
-                $(location).attr('href', "./Inkatan/SelectPlayers/?url=" + ipConnected);
-            }else if(cursor=="up"){
-                addPlayer()
-            }else if(cursor=="down"){
-                removePlayer()
-            }else if(cursor=="next-list"){
-                location.replace(parseUrl(location.href,"ListPlayers/",
-                [
-                    {name:"nplayer", value: lenPlayers.toString()}
-                ]))
-            }else if(cursor.indexOf("player")!=-1){
+    if (typeof (cursor) == "string") {
+        //$( ".messages" ).append(`<h3>${cursor}</h3>` );
+        //alert(1)
+        if (cursor == "start") {
+            $(location).attr('href', "./Inkatan/SelectPlayers/?url=" + ipConnected);
+        } else if (cursor == "up") {
+            addPlayer()
+        } else if (cursor == "down") {
+            removePlayer()
+        } else if (cursor == "next-list") {
+            location.replace(parseUrl(location.href, "ListPlayers/",
+                [{
+                    name: "nplayer",
+                    value: lenPlayers.toString()
+                }]))
+        } else if (cursor.indexOf("player") != -1) {
 
-                let newName=cursor.substr(cursor.indexOf("player")+7)
-                console.log(newName)
-                playerReady(newName).bind(returnContext())
-                
-            }
-            else if(cursor=="next-game"){
+            let newName = cursor.substr(cursor.indexOf("player") + 7)
+            console.log(newName)
+            playerReady(newName).bind(returnContext())
 
-                location.replace(parseUrl(location.href,"GameMode/",
-                [
-                ]))
-                
-            }
-            else if(cursor=="expansion"){
+        } else if (cursor == "next-game") {
 
-                location.replace(parseUrl(location.href,"ModeExpansion/",
-                [
-                ]))
-                
-            }
-            else if(cursor=="puntos"){
-                location.replace(parseUrl(location.href,"ModePoints/",
-                [
-                ]))
-            }
-            else if(cursor=="mas"){
-                modificarExpansion(true)
-            }
-            else if(cursor=="menos"){
-                modificarExpansion(false)
-            }
-            else if(cursor=="sumar"){
-                modificarPuntos(true)
-            }
-            else if(cursor=="restar"){
-                modificarPuntos(false)
-            }
-            
-            console.log(cursor)
+            location.replace(parseUrl(location.href, "GameMode/",
+                []))
+
+        } else if (cursor.indexOf("ready")) {
+            setReady(parseInt(cursor[0]))
+        } else if (cursor.indexOf("name")) {
+            changeName(cursor.substr(5))
+        } else if (cursor == "expansion") {
+
+            location.replace(parseUrl(location.href, "ModeExpansion/",
+                []))
+
+        } else if (cursor == "puntos") {
+            location.replace(parseUrl(location.href, "ModePoints/",
+                []))
+        } else if (cursor == "mas") {
+            modificarExpansion(true)
+        } else if (cursor == "menos") {
+            modificarExpansion(false)
+        } else if (cursor == "sumar") {
+            modificarPuntos(true)
+        } else if (cursor == "restar") {
+            modificarPuntos(false)
         }
+
+        console.log(cursor)
+    }
     /*player.body.velocity.set(0);
     if (cursor == "LEFT") {
         player.body.velocity.x = -384;
@@ -162,4 +201,3 @@ function render() {
     // game.debug.text(player.frame, 32, 32);
 
 }
-

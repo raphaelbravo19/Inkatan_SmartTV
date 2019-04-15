@@ -1,3 +1,5 @@
+//
+//import {SendMessages} from '../../Util/constants.js';
 var dots = window.setInterval( function() {
 	var wait = document.getElementById("searching");
 	if ( wait.innerHTML.length > 19 ) 
@@ -5,9 +7,10 @@ var dots = window.setInterval( function() {
 	else 
 	wait.innerHTML += ".";
 	}, 500);
-	
+	//alert(1)
 	function found(){
 		clearInterval(dots)
+		//alert(1)
 		let btnT = $('#btnTriangle')
 		$('#searching').remove()
 		btnT.append(`<div class="btnText">
@@ -15,3 +18,5 @@ var dots = window.setInterval( function() {
 		</div>`)
 		btnT.addClass("triangleBtn")
 	}
+
+

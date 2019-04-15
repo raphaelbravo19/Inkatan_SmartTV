@@ -2,37 +2,54 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="../../Styles/SelectPlayers/style.css">
+	<link rel="stylesheet" href="./style.css">
 	<script type="text/javascript" src="../../Logic/jquery-1.11.0.min.js"></script>
 	<script src="../../Logic/conect.js" charset="utf-8"></script>
 	<script src="../../webOSTVjs-1.1.0/webOSTV.js" charset="utf-8"></script>
 	<script src="../../webOSTVjs-1.1.0/webOSTV-dev.js" charset="utf-8"></script>
-	<script type="text/javascript" src="../../Scripts/SelectPlayers/app.js"></script>
+	<script type="text/javascript" src="./app.js"></script>
 </head>
 
 <body>
 	<div class="container">
-		<div  class="leftTitle">Inkatan</div>
-		<div class="title">Jugadores</div>
+		<div onclick="changeName('Raphael')" class="leftTitle">Inkatan</div>
+		<div onclick="setReady(readyIndex)" class="title">Jugadores</div>
 		<div id="playersContainer">
-			<div class="itemPlayer">
-				<div class="avatar" >
-
-				</div>
+			<div id="player1" class="itemPlayer">
 				<div class="playerNumber">1</div>
-			</div>
-			<div class="itemPlayer">
-				<div class="avatar" style="background: #ffdf2e">
+				<div class="avatar">
+					<img class="user" src="../../Assets/icons/user.png" />
 
 				</div>
-				<div class="playerNumber">2</div>
+				<div id="playerName1" class="playerName">Waiting...</div>
 			</div>
-			
+			<div id="player2" class="itemPlayer disabled">
+				<div class="playerNumber">2</div>
+				<div class="avatar" style="background: #ffdf2e">
+					<img class="user" src="../../Assets/icons/user.png" />
+				</div>
+				<div id="playerName2" class="playerName">Waiting...</div>
+			</div>
+			<div id="player3" class="itemPlayer disabled">
+				<div class="playerNumber">3</div>
+				<div class="avatar" style="background: #d017ff">
+					<img class="user" src="../../Assets/icons/user.png" />
+				</div>
+				<div id="playerName3" class="playerName">Waiting...</div>
+			</div>
+			<div id="player4" class="itemPlayer disabled">
+				<div class="playerNumber">4</div>
+				<div class="avatar" style="background: #ff682e">
+					<img class="user" src="../../Assets/icons/user.png" />
+				</div>
+				<div id="playerName4" class="playerName">Waiting...</div>
+			</div>
+
 		</div>
 		<div class="containerRombo">
-				<div class="triangulo"></div>	
-				<div class="trianguloRotate"></div>	
-				<div class="contenido">CONTINUAR</div>
+			<div class="triangulo"></div>
+			<div class="trianguloRotate"></div>
+			<div class="contenido">CONTINUAR</div>
 		</div>
 	</div>
 </body>
