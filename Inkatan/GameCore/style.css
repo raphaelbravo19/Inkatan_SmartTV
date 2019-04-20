@@ -1,0 +1,82 @@
+@font-face {
+	font-family: Kirsty;
+	src: url(../../Styles/fonts/kirsty.regular.ttf);
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
+
+.container {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	background-color: rgb(235, 210, 150);
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.canvas {
+	background-color: rgba(150, 150, 255, 1);
+	height: 100%;
+}
+
+.titleContainer {
+	display: flex;
+	align-items: center;
+	flex-direction: column
+}
+
+.title {
+	font-family: Kirsty;
+	color: black;
+	font-size: 2.3rem
+}
+
+
+.itemPlayer {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	position: absolute;
+}
+
+.playerName {
+	margin-top: 1rem;
+	font-family: Kirsty;
+	color: black;
+	font-size: 1.8rem;
+
+}
+
+.Bottom {
+	margin-top: 0;
+	margin-bottom: 1rem;
+}
+
+.avatar {
+	height: 12rem;
+	width: 12rem;
+	border-radius: 6rem;
+	display: flex;
+	align-items: center;
+	justify-content: center
+}
+
+.turnActive {
+
+	background: green;
+}
+
+.user {
+	width: 10rem;
+	height: 10rem;
+}

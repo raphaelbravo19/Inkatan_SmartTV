@@ -9,18 +9,19 @@ function getServers() {
 		console.log(error.name);
 	}
 }
-let ipConnected=''
+let ipConnected = ''
+
 function avaliableServersToDiv() {
 	console.log("[discoveryHelper] Avaliable: servers:\n");
 	var addOptions = "";
 	for (var it = 0; it < listAvaliableServers.length; it++) {
-		addOptions += '<button type="button" id="' + (it + 2)
-			+ '" class="button-list" onclick="entablishConnection(\''
-			+ listAvaliableServers[it] + '\');" >'
-			+ listAvaliableServers[it] + "</button>";
+		addOptions += '<button type="button" id="' + (it + 2) +
+			'" class="button-list" onclick="entablishConnection(\'' +
+			listAvaliableServers[it] + '\');" >' +
+			listAvaliableServers[it] + "</button>";
 		console.log(listAvaliableServers[it] + "\n");
 	}
-	ipConnected=listAvaliableServers[0]
+	ipConnected = listAvaliableServers[0]
 	//alert(1)
 	entablishConnection('')
 	var div = document.getElementById("avaliableServers");
@@ -48,9 +49,9 @@ function getUserIP(onNewIP) {
 
 	var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
 	var pc = new myPeerConnection({
-		iceServers: []
-	}),
-		noop = function () { },
+			iceServers: []
+		}),
+		noop = function () {},
 		localIPs = {},
 		ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
 		key;
@@ -68,8 +69,7 @@ function getUserIP(onNewIP) {
 		});
 
 		pc.setLocalDescription(sdp, noop, noop);
-	}).catch(function (reason) {
-	});
+	}).catch(function (reason) {});
 
 	pc.onicecandidate = function (ice) {
 		if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
@@ -77,11 +77,20 @@ function getUserIP(onNewIP) {
 	};
 }
 
-function entablishConnection(url) {
+function entablishConnection(index) {
 	//$(location).attr('href', "./?url=" + ipConnected);
-	connect(ipConnected)
+	//
+	//alert(1)
+	connect(listAvaliableServers[index])
 	//clearInterval(intervalReload)
-	//alert(ipConnected)
+	ipConnected = listAvaliableServers[index]
+	let findIp = ipConnected.indexOf(':8080');
+	let IpSelected = ipConnected[findIp - 2] == '.' ? ipConnected.substr(findIp - 1, 1) :
+		ipConnected[findIp - 3] == '.' ? ipConnected.substr(findIp - 2, 2) :
+		ipConnected[findIp - 4] == '.' ? ipConnected.substr(findIp - 3, 3) :
+		'0'
+
+	$(location).attr('href', "./Inkatan/SelectPlayers/?url=" + ipConnected + "&ipSelected=" + IpSelected);
 }
 // Usage
 
@@ -96,13 +105,16 @@ getUserIP(function (ip) {
 		var ws = new WebSocket("ws://" + ipWS + "." + i + ":8080");
 		ws.onopen = function () {
 			listAvaliableServers.push(this.url);
+
+			//console.log()
 			console.log('[discoveryHelper] Websocket found in :' + this.url);
 			clearInterval(intervalReload)
-			found()
-			avaliableServersToDiv();
+			console.log(this)
+			found(this.url, listAvaliableServers.length - 1)
+			//avaliableServersToDiv();
 		};
 	};
 });
-var intervalReload = setInterval(()=>{
+var intervalReload = setInterval(() => {
 	location.reload()
-},20000)
+}, 20000)
