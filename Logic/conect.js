@@ -22,19 +22,16 @@ function connect(url) {
 function getParameterByName(name) {
     return location.search.substr(location.search.indexOf(name) + name.length + 1)
 }
-let ActualParameters;
+var ActualParameters;
 
 function getParametersFromUrl() {
-    let newStr = location.search.substr(1)
+    var newStr = location.href.substr(location.href.indexOf('?') + 1)
+    console.log(newStr)
+    var objParameters = {};
+    newStr.split('&').map(function (item) {
+        var pairs = item.split('=')
 
-    let objParameters;
-    newStr.split('&').map(item => {
-        let pairs = item.split('=')
-
-        objParameters = {
-            ...objParameters,
-            [pairs[0]]: pairs[1]
-        }
+        objParameters[pairs[0]] = pairs[1]
     })
     ActualParameters = objParameters
 }
@@ -51,20 +48,20 @@ $(document).ready(function () {
 var cursors;
 
 function parseUrl(url, path, parameters) {
-    let index = url.indexOf('?')
-    let local = url.indexOf('Inkatan')
-    let urlParam = '';
+    var index = url.indexOf('?')
+    var local = url.indexOf('Inkatan')
+    var urlParam = '';
     if (parameters.length == 0) {
         urlParam = ''
     } else {
-        parameters.map(item => {
+        parameters.map(function (item) {
             urlParam +=
-                `&${item.name}=${item.value}`
+                '&' + (item.name) + '=' + (item.value)
 
         })
     }
     //alert(urlParam)
-    return url.substr(0, local + 7) + path + "/" + url.substr(index) + urlParam
+    return url.substr(0, local + 7) + path + "/index.html" + url.substr(index) + urlParam
 }
 
 function goToScreen(path, parameters) {
@@ -75,7 +72,7 @@ function goToScreen(path, parameters) {
 function update(cursor) {
     //alert(1)
     if (typeof (cursor) == "string") {
-        let obj
+        var obj
         console.log(cursor)
         switch (true) {
             case cursor === 'one':
@@ -117,16 +114,15 @@ function update(cursor) {
 
                 break;
             case cursor == "pass":
+
                 PaseTurno();
                 break;
         }
 
         if (cursor == "start") {
 
-        } else if (cursor == "up") {
-            addPlayer()
-        } else if (cursor == "down") {
-            removePlayer()
+        } else if (cursor == "up" || cursor == "down" || cursor == "left" || cursor == "right") {
+            MovePointer(cursor)
         } else if (cursor == "next-list") {
 
             goToScreen(
@@ -138,7 +134,7 @@ function update(cursor) {
 
         } else if (cursor.indexOf("player") != -1) {
 
-            let newName = cursor.substr(cursor.indexOf("player") + 7)
+            var newName = cursor.substr(cursor.indexOf("player") + 7)
             console.log(newName)
             playerReady(newName).bind(returnContext())
 

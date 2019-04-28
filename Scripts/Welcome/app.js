@@ -1,55 +1,83 @@
 //ANIMATION DOTS
 var dots = window.setInterval(function () {
 	var wait = document.getElementById("searching");
-	if (wait.innerHTML.length > 19)
-		wait.innerHTML = "Searching devices";
+	if (wait.innerHTML.length > 24)
+		wait.innerHTML = "Buscando dispositivos";
 	else
 		wait.innerHTML += ".";
 }, 500);
-let indexServer = 0
+var indexServer = 0
+var isBtnReload = false
 $(document).keydown(function (e) {
 	if (listAvaliableServers.length != 0) {
-		//alert(e.key)
-		switch (e.key) {
-			case "ArrowUp":
-				ChangeSelect(1);
+		console.log(e)
+		switch (e.keyCode) {
+			case 38:
+				if (!isBtnReload) {
+					ChangeSelect(1);
+				}
 				break;
-			case "ArrowDown":
-				ChangeSelect(-1)
+			case 37:
+				isBtnReload = true
+				ChangeMode(false)
 				break;
-			case "Enter":
-				entablishConnection(indexServer)
+			case 39:
+				isBtnReload = false
+				ChangeMode(true)
+				break;
+			case 40:
+				if (!isBtnReload) {
+					ChangeSelect(-1)
+				}
+				break;
+			case 13:
+				if (!isBtnReload) {
+					entablishConnection(indexServer)
+				} else {
+					location.reload()
+				}
+
 				break;
 		}
 	}
 });
 //FOUND SERVER
-let indexScroll = 0
+var indexScroll = 0
+
+function ChangeMode(toggle) {
+	if (toggle) {
+		$('#server' + (indexServer)).addClass("Selected")
+		$('#btnReload').removeClass("active")
+	} else {
+		$('#server' + (indexServer)).removeClass("Selected")
+		$('#btnReload').addClass("active")
+	}
+}
 
 function ChangeSelect(value) {
 	//alert(1)
 	if (value == 1) {
 		if (indexServer > 0) {
-			$(`#server${indexServer}`).removeClass("Selected")
-			$(`#server${indexServer-1}`).addClass("Selected")
+			$('#server' + (indexServer)).removeClass("Selected")
+			$('#server' + (indexServer - 1)).addClass("Selected")
 			indexServer = indexServer - 1
 			if (indexServer < indexScroll) {
-				//let top = $(`#server${indexServer-2}`).offset().top
+
 				//alert(top)
 				indexScroll -= 1
-				$("#list").scrollTop($(`#server${indexServer}`).offset().top - $(`#server0`).offset().top);
+				$("#list").scrollTop($('#server' + (indexServer)).offset().top - $('server0').offset().top);
 			}
 
 		}
 	} else {
 		if (indexServer < listAvaliableServers.length - 1) {
-			$(`#server${indexServer}`).removeClass("Selected")
-			$(`#server${indexServer+1}`).addClass("Selected")
+			$('#server' + (indexServer)).removeClass("Selected")
+			$('#server' + (indexServer + 1)).addClass("Selected")
 			indexServer = indexServer + 1
 			if (indexServer >= indexScroll + 3) {
 				//alert($(`#server0`).offset().top)
 				indexScroll += 1
-				$("#list").scrollTop($(`#server${indexServer-2}`).offset().top - $(`#server0`).offset().top);
+				$("#list").scrollTop($('#server' + (indexServer - 2)).offset().top - $('#server0').offset().top);
 			}
 
 		}
@@ -61,11 +89,14 @@ function ChangeSelect(value) {
 function found(url, indexElement) {
 	clearInterval(dots)
 
-	//let btnT = $('#btnTriangle')
-	let listContainer = $('#list')
+	//var btnT = $('#btnTriangle')
+	var listContainer = $('#list')
 	$('#searching').remove()
 	listContainer.addClass("listServers")
-	listContainer.append(`<div id="server${indexElement}" class="itemServer${indexElement==0?" Selected":''}">${url}</div>`)
+	listContainer.append('<div id="server' + (indexElement) + '" class="itemServer' + (indexElement == 0 ? " Selected" : '') + '">' + (url) + '</div>')
+	//setTimeout(function () {
+	//	entablishConnection(0);
+	//}, 5000)
 	/*btnT.append(`<div class="btnText">
 		Start
 		</div>`)*/ //btnT.addClass("triangleBtn")

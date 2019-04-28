@@ -1,10 +1,10 @@
 {
-  "id": "com.mg.pc3",
-  "version": "0.0.1",
-  "vendor": "My Company",
-  "type": "web",
-  "main": "index.html",
-  "title": "character movement",
-  "icon": "./Assets/icons/icon.png",
-  "largeIcon": "./Assets/icons/largeIcon.png"
+    "id": "com.inkatan.upc",
+    "version": "0.0.1",
+    "vendor": "My Company",
+    "type": "web",
+    "main": "index.html",
+    "title": "Inkatan",
+    "icon": "./Assets/icons/appIconX.png",
+    "largeIcon": "./Assets/icons/appIconXL.png"
 }

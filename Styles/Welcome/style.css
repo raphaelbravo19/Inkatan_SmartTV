@@ -56,6 +56,11 @@ body {
 	font-family: Kirsty;
 	color: red;
 	font-size: 2rem;
+	margin-top: 3rem;
+}
+
+#list {
+	margin-top: 2rem;
 }
 
 .listServers {
@@ -66,7 +71,7 @@ body {
 	border-top-left-radius: 2rem;
 	border-bottom-right-radius: 2rem;
 	background-color: #ffeca9;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .itemServer {
@@ -83,4 +88,31 @@ body {
 .Selected {
 	background-color: rgba(0, 0, 0, 0.5);
 	color: white;
+}
+
+.buttonReload {
+	font-family: Kirsty;
+	color: white;
+	font-size: 1.6rem;
+	display: flex;
+
+	background-color: #9b8329;
+	padding: 1rem;
+	padding-left: 2rem;
+	padding-right: 2rem;
+	border: 0.5rem solid #4f410d;
+	filter: sepia(20%);
+	transition: all 0.3s
+}
+
+.buttonReload:hover {
+	border: 0.5rem solid #b39939;
+	background-color: #ebe0b6;
+	color: black;
+}
+
+.active {
+	border: 0.5rem solid #b39939;
+	background-color: #ebe0b6;
+	color: black;
 }

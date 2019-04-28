@@ -6,8 +6,8 @@ function modificarExpansion(mas) {
 	}else{
 		if(expansionPorcentaje>5) expansionPorcentaje-=5
 	}*/
-	document.getElementById(`percentValue`).innerHTML = `${mas}%`;
-	setTimeout(() => {
+	document.getElementById('percentValue').innerHTML = mas + '%';
+	setTimeout(function () {
 		location.replace(parseUrl(location.href, "/GameCore",
 			[]))
 		gameStarting = false

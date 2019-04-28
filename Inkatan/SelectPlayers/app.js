@@ -1,34 +1,9 @@
 //import SendMessages from '../../Util/constants';
-let playersIcons = [
-	`<div id="player1" class="itemPlayer">
-	<div class="playerNumber">1</div>
-	<div class="avatar">
-		<img class="user" src="../../Assets/icons/user.png" />
-
-	</div>
-	<div id="playerName1" class="playerName">Waiting...</div>
-</div>
-`, `<div id="player2" class="itemPlayer disabled">
-<div class="playerNumber">2</div>
-<div class="avatar" style="background: #ffdf2e">
-	<img class="user" src="../../Assets/icons/user.png" />
-</div>
-<div id="playerName2" class="playerName">Waiting...</div>
-</div>`, `
-<div id="player3" class="itemPlayer disabled">
-<div class="playerNumber">3</div>
-<div class="avatar" style="background: #d017ff">
-	<img class="user" src="../../Assets/icons/user.png" />
-</div>
-<div id="playerName3" class="playerName">Waiting...</div>
-</div>
-`, `<div id="player4" class="itemPlayer disabled">
-<div class="playerNumber">4</div>
-<div class="avatar" style="background: #ff682e">
-	<img class="user" src="../../Assets/icons/user.png" />
-</div>
-<div id="playerName4" class="playerName">Waiting...</div>
-</div>`
+var playersIcons = [
+	'<div id="player1" class="itemPlayer"><div class="playerNumber">1</div><div class="avatar"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName1" class="playerName">Esperando...</div></div>',
+	'<div id="player2" class="itemPlayer disabled"><div class="playerNumber">2</div><div class="avatar" style="background: #ffdf2e"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName2" class="playerName">Esperando...</div></div>',
+	'<div id="player3" class="itemPlayer disabled"><div class="playerNumber">3</div><div class="avatar" style="background: #d017ff"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName3" class="playerName">Esperando...</div></div>',
+	'<div id="player4" class="itemPlayer disabled"><div class="playerNumber">4</div><div class="avatar" style="background: #ff682e"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName4" class="playerName">Esperando...</div></div>'
 ]
 
 $(document).ready(function () {
@@ -36,57 +11,63 @@ $(document).ready(function () {
 	//console.log(SendMessages)
 	//elementTest(1)
 
-	$('#token').append(`Token: INK-${ActualParameters.ipSelected}`);
+	$('#token').append('Token: INK-' + ActualParameters.ipSelected);
 
 });
-let lenPlayers = 0
-let numberPlayers = 0
+var lenPlayers = 0
+var numberPlayers = 0
 //alert(location.href)
-let ready = [];
+var ready = [];
 
 function setPlayers(valueCursor) {
 	$("#messageWaiting").remove();
-	for (let i = 0; i < valueCursor; i++) {
+	for (var i = 0; i < valueCursor; i++) {
 		$("#playersContainer").append(playersIcons[i]);
 		ready.push(false)
 	}
 	numberPlayers = valueCursor
 }
 
-let listNames = []
+var listNames = []
 
 function changeName(name) {
 	if (lenPlayers < numberPlayers) {
 		lenPlayers++;
-		$(`#playerName${lenPlayers}`).text(name)
+		$('#playerName' + lenPlayers).text(name)
 		listNames.push(name)
-		$(`#player${lenPlayers}`).removeClass("disabled")
+		$('#player' + lenPlayers).removeClass("disabled")
 		setReady(lenPlayers - 1)
 	}
 }
-let gameStarting = false;
-let readyIndex = 0;
+var gameStarting = false;
+var readyIndex = 0;
 
 
 
 function setReady(index) {
-	let toChange = ready[index]
+	var toChange = ready[index]
 	ready[index] = !toChange
 	//alert('55')
 	if (toChange) {
-		$(`#player${index+1} .avatar .readyContainer`).remove()
+		$('#player' + (index + 1) + ' .avatar .user').attr('src', '../../Assets/icons/user.png')
 	} else {
-		$(`#player${index+1} .avatar`).append(`<div class="readyContainer">
-			Ready
-		</div>`)
+		$('#player' + (index + 1) + ' .avatar .user').attr('src', '../../Assets/icons/userReady.png')
 	}
 	readyIndex++;
-	if (!ready.includes(false)) {
+	var noMoreReady = true;
+	this.ready.map(function (itemReady) {
+		if (!itemReady) {
+			noMoreReady = false
+		}
+	})
+	if (noMoreReady) {
 		gameStarting = true
 		//alert(1)
-		let strNames = '';
-		listNames.map(item => strNames += `,${item}`)
-		setTimeout(() => {
+		var strNames = '';
+		listNames.map(function (item) {
+			strNames += ',' + item
+		})
+		setTimeout(function () {
 			location.replace(parseUrl(location.href, "/GameMode",
 				[{
 						name: "namesPlayers",

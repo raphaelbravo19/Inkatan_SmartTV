@@ -9,7 +9,7 @@ function getServers() {
 		console.log(error.name);
 	}
 }
-let ipConnected = ''
+var ipConnected = ''
 
 function avaliableServersToDiv() {
 	console.log("[discoveryHelper] Avaliable: servers:\n");
@@ -62,14 +62,14 @@ function getUserIP(onNewIP) {
 	}
 	pc.createDataChannel("");
 
-	pc.createOffer().then(function (sdp) {
+	pc.createOffer(function (sdp) {
 		sdp.sdp.split('\n').forEach(function (line) {
 			if (line.indexOf('candidate') < 0) return;
 			line.match(ipRegex).forEach(iterateIP);
 		});
 
-		pc.setLocalDescription(sdp, noop, noop);
-	}).catch(function (reason) {});
+		pc.setLocalDescription(sdp, noop, noop)
+	}, function (reason) {})
 
 	pc.onicecandidate = function (ice) {
 		if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
@@ -84,13 +84,13 @@ function entablishConnection(index) {
 	connect(listAvaliableServers[index])
 	//clearInterval(intervalReload)
 	ipConnected = listAvaliableServers[index]
-	let findIp = ipConnected.indexOf(':8080');
-	let IpSelected = ipConnected[findIp - 2] == '.' ? ipConnected.substr(findIp - 1, 1) :
+	var findIp = ipConnected.indexOf(':8080');
+	var IpSelected = ipConnected[findIp - 2] == '.' ? ipConnected.substr(findIp - 1, 1) :
 		ipConnected[findIp - 3] == '.' ? ipConnected.substr(findIp - 2, 2) :
 		ipConnected[findIp - 4] == '.' ? ipConnected.substr(findIp - 3, 3) :
 		'0'
-
-	$(location).attr('href', "./Inkatan/SelectPlayers/?url=" + ipConnected + "&ipSelected=" + IpSelected);
+	$(location).attr('href', location.href.substr(0, location.href.length - 10) + "Inkatan/SelectPlayers/index.html?url=" + ipConnected + "&ipSelected=" + IpSelected);
+	//$(location).attr('href', "./Inkatan/SelectPlayers/?url=" + ipConnected + "&ipSelected=" + IpSelected);
 }
 // Usage
 
@@ -110,11 +110,19 @@ getUserIP(function (ip) {
 			console.log('[discoveryHelper] Websocket found in :' + this.url);
 			clearInterval(intervalReload)
 			console.log(this)
-			found(this.url, listAvaliableServers.length - 1)
+			var canAdd = true
+			listAvaliableServers.map(function (serverFound) {
+				if (serverFound == this.url) {
+					canAdd = false
+				}
+			})
+			if (canAdd) {
+				found(this.url, listAvaliableServers.length - 1)
+			}
 			//avaliableServersToDiv();
 		};
 	};
 });
-var intervalReload = setInterval(() => {
-	location.reload()
+var intervalReload = setInterval(function () {
+	//location.reload()
 }, 20000)
