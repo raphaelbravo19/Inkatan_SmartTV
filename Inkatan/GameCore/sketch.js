@@ -36,7 +36,8 @@ var indicators = [{
     fi: 0,
     fj: 0
 }]
-var indicatorTriangle = [{
+var indicatorTriangle = [
+    {
     fi: 0,
     fj: 0
 }, {
@@ -49,7 +50,8 @@ var indicatorTriangle = [{
     fi: 0,
     fj: 0
 }]
-var indicatorArista = [{
+var indicatorArista = [
+    {
     fi: 0,
     fj: 0
 }, {
@@ -87,7 +89,8 @@ var resources = [{
     color: 'rgb(102,51,0)',
     cant: 8
 }]
-var numberTags = [{
+var numberTags = [
+    {
         tag: 2,
         cant: 5
     },
@@ -137,30 +140,63 @@ var paddingLeft = widthCanvas * 0.35 / 2
 var centerMapH = heightCanvas / 2
 var hTriangle = mapDelimit / 8
 var sideTriangle = hTriangle * 2 / Math.sqrt(3)
-var statusSelected = 'arista'
+var statusSelection = ['vertex','arista','section']
+var statusSelectedIndex = -1
+var statusSelected = statusSelection[statusSelectedIndex]
+var PlayersDetails = []
+
 var dice=[0,0]
 var listHouse=[]
 var listWays=[]
 var listKnight=[]
-let img;
-//function preload() {
-  //img = loadImage('road.jpg');
-//}
+var players;
+var img;
+
+/* INITIAL SELECTION = START
+
+*/
+var GAMESTATUS = "START"
+function preload() {
+  img = loadImage('grass_pattern.jpg');
+}
 function setup() {
     var canvas = createCanvas(widthCanvas, heightCanvas);
     canvas.parent('#canvas')
-    //strokeWeight(2)
-    background(50)
+    background(150,150,255)
+    players=ActualParameters.namesPlayers.split(',')
+    setPlayer()
     setPoints()
 }
-
+function setPlayer(){
+    players.map(function(player){
+        PlayersDetails.push(
+            {
+                name: player,
+                houses:[],
+                resources:{
+                    stone:0,
+                    wool:0,
+                    potatoes:0,
+                    quinoa:0,
+                    gold:0,
+                    wood:0,
+                }
+            }
+        )
+    })
+    
+}
 function draw() {
-    background(50)
+    
+    image(img, 0,0,widthCanvas/2,heightCanvas/2)
+    image(img, widthCanvas/2,0,widthCanvas/2,heightCanvas/2)
+    image(img, 0,heightCanvas/2,widthCanvas/2,heightCanvas/2)
+    image(img, widthCanvas/2,heightCanvas/2,widthCanvas/2,heightCanvas/2)
     stroke(0)
     strokeWeight(1)
     listTriangles.map(function (triangleItem) {
 
-        renderTriangle(triangleItem, (triangleItem.number==(dice[0]||0)+(dice[1]||0)||(statusSelected == "section" && triangleItem.index_i == indicatorTriangle[turnIndex].fi && triangleItem.index_j == indicatorTriangle[turnIndex].fj)))
+        renderTriangle(triangleItem, ((statusSelected == "section" && triangleItem.index_i == indicatorTriangle[turnIndex].fi && triangleItem.index_j == indicatorTriangle[turnIndex].fj)))
 
     })
     listHouse.map(function(item){
@@ -180,7 +216,7 @@ function draw() {
     if(dice[0]!=0){
         drawDice()
     }
-
+    STATUS_PROCESS(GAMESTATUS)
 }
 
 //10-|7-(i*2)|
@@ -199,6 +235,11 @@ function keyPressed() {
         throwDice()
     }else if( keyCode===32){
         setObjectPoint()
+    }
+    else if( keyCode===81){
+        console.log(statusSelected)
+        statusSelectedIndex=statusSelectedIndex==2?0:statusSelectedIndex+1
+        statusSelected=statusSelection[statusSelectedIndex]
     }
     
 
@@ -272,23 +313,26 @@ function setObjectPoint(){
         listIt=listHouse
         addItem.context=ListPoints[indicators[turnIndex].fi][indicators[turnIndex].fj]
         addItem.colorIndex=colorsPointer[turnIndex]
+        addItem.player= players[turnIndex]
         addItem.type='house'
         var validate=true
         
         listIt.map(function(vertexElement,iter){
             console.log(vertexElement,'-',addItem)
             if(vertexElement.context==addItem.context){
-                if(vertexElement.type=='house'){
+                if(vertexElement.type=='house' && vertexElement.colorIndex==addItem.colorIndex){
                     validate=false
-                    listHouse[iter].type='bighouse'
+                    //listHouse[iter].type='bighouse'
+                    //BIGHOUSE PENDING
                 }else{
                     validate=false
                 }
             }
         })
         if(validate){
-        listHouse.push(addItem)
-    }
+            listHouse.push(addItem)
+            PlayersDetails[turnIndex].houses.push(addItem)
+        }   
 
     }
     if(statusSelected==='arista'){
@@ -353,6 +397,7 @@ function setPoints() {
     var tempListPoints;
     var resColor;
     var resCor;
+    var resType;
     var part;
     var intTemp;
     var tagSelected
@@ -365,6 +410,7 @@ function setPoints() {
                     resources[resColor].cant = resources[resColor].cant - 1
 
                     resCor = resources[resColor].color
+                    resType = resources[resColor].type
                     if (resources[resColor].cant == 0) {
                         resources = resources.filter(function (itemToDel, iDel) {
                             return iDel != resColor
@@ -388,6 +434,7 @@ function setPoints() {
                         vertex: tempListPoints,
                         background: resCor,
                         number: tagSelected.tag,
+                        resource:resType,
                         index_i: i - 1,
                         index_j: i <= 4 ? j * 2 : (j * 2) + 1
                     })
@@ -408,6 +455,7 @@ function setPoints() {
                     resources[resColor].cant = resources[resColor].cant - 1
 
                     resCor = resources[resColor].color
+                    resType = resources[resColor].type
                     if (resources[resColor].cant == 0) {
                         resources = resources.filter(function (itemToDel, iDel) {
                             return iDel != resColor
@@ -425,6 +473,7 @@ function setPoints() {
                     listTriangles.push({
                         vertex: tempListPoints,
                         background: resCor,
+                        resource:resType,
                         number: tagSelected.tag,
                         index_i: i,
                         index_j: i < 4 ? (j * 2) + 1 : j * 2
@@ -446,7 +495,52 @@ function setPoints() {
 function throwDice() {
     //fill('white')
     dice=[(Math.floor(Math.random() * 10000)%6)+1,(Math.floor(Math.random() * 10000)%6)+1]
-
+    var trianglesSelected=listTriangles.filter(function(item){return item.number==dice[0]+dice[1]})
+    var vertexCodes={}
+    trianglesSelected.map(function(item){
+        item.vertex.map(function(vertex){
+            if(vertexCodes[vertex.id]){
+                vertexCodes[vertex.id][item.resource]=vertexCodes[vertex.id][item.resource]?
+                vertexCodes[vertex.id][item.resource]+1:1
+            }else{
+                vertexCodes[vertex.id]={}
+                vertexCodes[vertex.id][item.resource]=1
+            }
+        })
+    })
+    console.log(vertexCodes)
+    var giveResource={}
+    listHouse.map(function(house){
+        var include=vertexCodes[house.context.id]!=null
+        if(include){
+            if(!giveResource[house.player]){
+                giveResource[house.player]={}
+            }
+            //Object.
+            console.log(vertexCodes[house.context.id])
+                var asignedResources= Object.entries(vertexCodes[house.context.id])
+                asignedResources.map(function(res){
+                   giveResource[house.player][res[0]]=giveResource[house.player][res[0]]?giveResource[house.player][res[0]]+res[1]:res[1]
+                })
+            //}else{
+                //giveResource[house.player]=[]
+           // }
+           // giveResource[house.player].push(vertexCodes[house.context.id])
+        }
+        
+    })
+    console.log(giveResource)
+    var temStr=''
+    Object.entries(giveResource).map(function(item){
+        temStr=temStr+item[0]+ ' '
+        Object.entries(item[1]).map(function(asign){
+            if(asign[1]>0){
+                temStr=temStr+asign[1].toString()+' '+asign[0]+' '
+            }
+        })
+        temStr+="\n"
+    })
+    strDeal=temStr
     //rect(paddingLeft, heightCanvas - 100, 80, 80)
 }
 var diceSide=hTriangle*0.9
@@ -541,4 +635,149 @@ function renderTriangle(objTriangle, selected) {
     textSize((hTriangle * 0.2));
     text(objTriangle.number, posNumberx, posNumbery)
     //text(100, 0, 0)
+}
+function FIRST_ASIGN(){
+    for (let i = 0; i < PlayersDetails.length; i++) {
+        var player=PlayersDetails[i]
+        var houses= player.houses
+        houses.map(function(house){
+            var houseId= house.context.id
+            listTriangles.filter(function(trl){
+                return (
+                    trl.vertex[0].id==houseId||
+                    trl.vertex[1].id==houseId||
+                    trl.vertex[2].id==houseId)
+            }).map(function(trl){
+                PlayersDetails[i].resources[trl.resource]=PlayersDetails[i].resources[trl.resource]+1
+            })
+            
+        })
+    }
+    console.log(PlayersDetails)
+}
+function STATUS_PROCESS(status){
+    
+    if(status==="START"){
+        START_PROCESS()
+    }else if(status==="ASIGN"){
+        ASIGN_PROCESS()
+    }else if(status==="DEAL"){
+        DEAL_PROCESS()
+    }else if(status==="ROUND"){
+        ROUND_PROCESS()
+    }
+    
+    
+}
+
+
+var pendingConfig =true
+
+function START_PROCESS(){
+    if(pendingConfig){
+        statusSelectedIndex=0
+        statusSelected = statusSelection[statusSelectedIndex]
+        pendingConfig=false
+    }
+    if(PlayersDetails[turnIndex].houses.length==2){
+        if(turnIndex==PlayersDetails.length-1){
+            statusSelectedIndex=-1
+            statusSelected = statusSelection[statusSelectedIndex]
+            GAMESTATUS="ASIGN"
+            pendingConfig=true
+        }else{
+            PaseTurno()
+        }
+        
+    }
+}
+function ASIGN_PROCESS(){
+    if(pendingConfig){
+        FIRST_ASIGN()
+        GAMESTATUS="DEAL"
+    }
+}
+var strDeal=""
+var detSize=0
+var det=1
+function DEAL_PROCESS(){
+    if(pendingConfig){
+        PlayersDetails.map(function(player){
+            strDeal=strDeal+player.name+ ' '
+            Object.entries(player.resources).map(function(res){
+                if(res[1]>0){
+                    strDeal=strDeal+res[1].toString()+' '+res[0]+' '
+                }
+            })
+            strDeal+="\n"
+        })
+        pendingConfig=false
+        setTimeout(function(){
+            PaseTurno()
+            strDeal=''
+            detSize=0
+            det=1
+            pendingConfig=true
+            GAMESTATUS="ROUND"
+        },2000)
+    }
+    
+    detSize+=det;
+    if(detSize>50) det=-1
+
+    if(detSize==0) det=1
+    stroke(255)
+    strokeWeight(2)
+    fill(0)
+    textStyle(BOLD)
+    textSize(heightCanvas*(0.06+(0.00005*detSize)))
+    textAlign(CENTER, CENTER)
+    text(strDeal, widthCanvas/2,heightCanvas/2)
+
+}
+var movement=false
+function ROUND_PROCESS(){
+    if(pendingConfig){
+        if(strDeal!=''){
+            pendingConfig=false
+            movement=true
+            setTimeout(function(){
+                movement=false
+                pendingConfig=true
+                strDeal=''
+                PaseTurno()
+            },2000)
+        }
+    }
+    if(movement){
+        detSize+=det;
+        if(detSize>50) det=-1
+
+        if(detSize==0) det=1
+        stroke(255)
+        strokeWeight(2)
+        fill(0)
+        textStyle(BOLD)
+        textSize(heightCanvas*(0.06+(0.00005*detSize)))
+        textAlign(CENTER, CENTER)
+        text(strDeal, widthCanvas/2,heightCanvas/2)
+    }
+    /*if(pendingConfig){
+        PlayersDetails.map(function(player){
+            strDeal=strDeal+player.name+ ' '
+            Object.entries(player.resources).map(function(res){
+                if(res[1]>0){
+                    strDeal=strDeal+res[1].toString()+' '+res[0]+' '
+                }
+            })
+            strDeal+="\n"
+        })
+        pendingConfig=false
+        setTimeout(function(){
+            PaseTurno()
+            GAMESTATUS="ROUND"
+        },2000)
+    }*/
+    
+
 }

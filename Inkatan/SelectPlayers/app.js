@@ -10,9 +10,15 @@ $(document).ready(function () {
 	//getParametersFromUrl()
 	//console.log(SendMessages)
 	//elementTest(1)
-
-	$('#token').append('Token: INK-' + ActualParameters.ipSelected);
-
+	
+	//$('#token').append('Token: INK-' + ActualParameters.ipSelected);
+	
+	var data=ActualParameters.url.substr(5,ActualParameters.url.length-11)
+	var qr = qrcode(4, 'M');
+  	qr.addData(data);
+	  qr.make();
+	 var wd=$(window).height();
+  	document.getElementById('token').innerHTML = qr.createImgTag(parseInt(wd/200),0);
 });
 var lenPlayers = 0
 var numberPlayers = 0

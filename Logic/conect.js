@@ -14,7 +14,10 @@ function connect(url) {
         if (cursors) update(cursors);
 
     };
-
+    //setTimeout(()=>{
+      //  webSocket.ws.send('{"body":{"message":"aqui"}}')
+    //},2000)
+    
     webSocket.ws.onclose = function () {};
 
 };
@@ -94,6 +97,9 @@ function update(cursor) {
             case cursor === 'points':
                 location.replace(parseUrl(location.href, "/ModePoints",
                     []))
+                break;
+            case cursor === 'dice':
+                throwDice()
                 break;
             case cursor.indexOf("PlayerName") != -1:
                 obj = JSON.parse(cursor)
