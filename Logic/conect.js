@@ -90,6 +90,9 @@ function update(cursor) {
             case cursor === 'four':
                 setPlayers(4);
                 break;
+            case cursor === 'add':
+                setObjectPoint();
+                break;
             case cursor === 'expand':
                 location.replace(parseUrl(location.href, "/ModeExpansion",
                     []))
