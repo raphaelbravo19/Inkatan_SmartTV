@@ -15,12 +15,18 @@ function connect(url) {
 
     };
     //setTimeout(()=>{
-      //  webSocket.ws.send('{"body":{"message":"aqui"}}')
+    //  webSocket.ws.send('{"body":{"message":"aqui"}}')
     //},2000)
-    
+
     webSocket.ws.onclose = function () {};
 
 };
+
+function sendMessageServer(texto) {
+    console.log(texto)
+    //webSocket.ws.send(JSON.stringify(texto));
+
+}
 
 function getParameterByName(name) {
     return location.search.substr(location.search.indexOf(name) + name.length + 1)
@@ -91,7 +97,7 @@ function update(cursor) {
                 setPlayers(4);
                 break;
             case cursor === 'add':
-                setObjectPoint();
+                Add();
                 break;
             case cursor === 'expand':
                 location.replace(parseUrl(location.href, "/ModeExpansion",
@@ -102,7 +108,7 @@ function update(cursor) {
                     []))
                 break;
             case cursor === 'dice':
-                throwDice()
+                ThrowDice()
                 break;
             case cursor.indexOf("PlayerName") != -1:
                 obj = JSON.parse(cursor)
@@ -131,7 +137,7 @@ function update(cursor) {
         if (cursor == "start") {
 
         } else if (cursor == "up" || cursor == "down" || cursor == "left" || cursor == "right") {
-            MovePointer(cursor)
+            Move(cursor)
         } else if (cursor == "next-list") {
 
             goToScreen(

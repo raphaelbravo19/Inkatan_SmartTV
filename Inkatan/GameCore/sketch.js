@@ -6,84 +6,116 @@ var colorsPointer = ['rgba(0, 255, 0,0.7)', 'rgba(255, 223, 46,0.7)', 'rgba(208,
 var mapDelimit = widthCanvas * 0.65
 var paddingLeft = widthCanvas * 0.35 / 2
 var centerMapH = heightCanvas / 2
-var radio = mapDelimit/12
-var paddingHeight= centerMapH-(radio*5)
-var mapa= new Mapa()
+var radio = mapDelimit / 12
+var paddingHeight = centerMapH - (radio * 5)
+var mapa = Mapa()
+var game = Game()
+var dice = Dice()
 var PlayersDetails = []
-function preload(){
+
+// PRELOAD IMAGES
+function preload() {
+
+
     mapa.resources.preload()
 }
+
+//SETUP MAP AND PLAYERS
 function setup() {
     var canvas = createCanvas(widthCanvas, heightCanvas);
     canvas.parent('#canvas')
-    background(100,180,100)
+    background(100, 180, 100)
     mapa.setup()
     setPlayer()
 }
+
+//DRAW
 function draw() {
-    background(100,180,100)
+    background(100, 180, 100)
     mapa.printAll()
+    mapa.printObjects(PlayersDetails)
+    game.Game(mapa, PlayersDetails)
     showPointer()
 }
-function showPointer(){
-    switch(mapa.select){
+
+//SHOW MAP POINTER
+function showPointer() {
+    switch (mapa.select) {
         case 'vertice':
-                mapa.printPoint(PlayersDetails[turnIndex].indicators.vertice.fi,
+            mapa.printPoint(PlayersDetails[turnIndex].indicators.vertice.fi,
                 PlayersDetails[turnIndex].indicators.vertice.fj)
-                break;
+            break;
         case 'arista':
-                mapa.printArista(PlayersDetails[turnIndex].indicators.arista.fi,
+            mapa.printArista(PlayersDetails[turnIndex].indicators.arista.fi,
                 PlayersDetails[turnIndex].indicators.arista.fj)
-                break
+            break
         case 'rombo':
-                mapa.printRombo(PlayersDetails[turnIndex].indicators.rombo.fi,
+            mapa.printRombo(PlayersDetails[turnIndex].indicators.rombo.fi,
                 PlayersDetails[turnIndex].indicators.rombo.fj)
-                break
+            break
     }
 }
+
+//TEST ACTIONS
 function keyPressed() {
     if (keyCode === DOWN_ARROW) {
-        mapa.move(PlayersDetails[turnIndex],'down')
+        mapa.move(PlayersDetails[turnIndex], 'down')
     } else if (keyCode === UP_ARROW) {
-        mapa.move(PlayersDetails[turnIndex],'up')
+        mapa.move(PlayersDetails[turnIndex], 'up')
     } else if (keyCode === RIGHT_ARROW) {
-        mapa.move(PlayersDetails[turnIndex],'right')
+        mapa.move(PlayersDetails[turnIndex], 'right')
     } else if (keyCode === LEFT_ARROW) {
-        mapa.move(PlayersDetails[turnIndex],'left')
+        mapa.move(PlayersDetails[turnIndex], 'left')
+    } else if (keyCode === 32) {
+        mapa.addObject(PlayersDetails[turnIndex])
+    } else if (key === 'q') {
+        mapa.changeSelect()
+    } else if (key === 'd') {
+        dice.throwDice()
     }
 }
-function setPlayer(){
-    var players=ActualParameters.namesPlayers.split(',')
-    players.map(function(player,i){
-        PlayersDetails.push(
-            {
-                name: player,
-                color:colorsPointer[i],
-                houses:[],
-                resources:{
-                    stone:0,
-                    wool:0,
-                    potatoes:0,
-                    quinoa:0,
-                    gold:0,
-                    wood:0,
-                },
-                indicators : {
-                    vertice:{
-                        fi: 0,
-                        fj: 0
-                    },
-                    arista:{
-                        fi: 0,
-                        fj: 0
-                    },
-                    rombo:{
-                        fi: 0,
-                        fj: 0
-                    }
+
+//CALL MOVE FUNCTIONS
+function Move(val) {
+    mapa.move(PlayersDetails[turnIndex], val)
+}
+
+//DICE ACTION
+function ThrowDice() {
+    dice.throwDice()
+}
+
+//ADD AN OBJECT
+function Add(val) {
+    mapa.addObject(PlayersDetails[turnIndex])
+}
+
+//CONFIGURE PLAYERS
+function setPlayer() {
+    var players = ActualParameters.namesPlayers.split(',')
+    players.map(function (player, i) {
+        PlayersDetails.push({
+            name: player,
+            color: colorsPointer[i],
+            houses: [],
+            ways: [],
+            resources: {
+                stone: 0,
+                wool: 0,
+                potato: 0,
+                quinoa: 0,
+                gold: 0,
+                wood: 0,
+            },
+            indicators: {
+                vertice: positionsVertice[i],
+                arista: positionsAristas[i],
+                rombo: {
+                    fi: 0,
+                    fj: 0
                 }
             }
-        )
+        })
     })
-    
+
 }

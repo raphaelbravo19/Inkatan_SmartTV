@@ -32,3 +32,15 @@ function PaseTurno() {
 	//alert(turnIndex)
 	$('#avatar' + (turnIndex + 1)).addClass("turnActive");
 }
+
+function BackTurno() {
+	//alert(1)
+	$('#avatar' + (turnIndex + 1)).removeClass("turnActive");
+	if (turnIndex == 0) {
+		turnIndex = ActualParameters.numberPlayers - 1;
+	} else {
+		turnIndex -= 1
+	}
+	//alert(turnIndex)
+	$('#avatar' + (turnIndex + 1)).addClass("turnActive");
+}
