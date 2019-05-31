@@ -8,6 +8,8 @@ function Game() {
                 this.START_PROCESS(obj, players)
             } else if (this.status == "ROUND") {
                 this.ROUND_PROCESS()
+            } else if (this.status == "KNIGHT") {
+                this.KNIGHT_PROCESS()
             }
 
         },
@@ -51,6 +53,9 @@ function Game() {
         },
         ROUND_PROCESS: function () {
 
+        },
+        KNIGHT_PROCESS: function () {
+            mapa.select = "rombo"
         }
     }
 }

@@ -191,6 +191,7 @@ var positionsAristas = [{
         fj: 10
     }
 ]
+
 var portos = [{
     fi: 1,
     fj: 1

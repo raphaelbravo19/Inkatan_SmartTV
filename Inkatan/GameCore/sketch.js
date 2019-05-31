@@ -2,9 +2,10 @@ var widthCanvas = $(window).width() * 1;
 var heightCanvas = $(window).height();
 
 var colorsPointer = ['rgba(0, 255, 0,0.7)', 'rgba(255, 223, 46,0.7)', 'rgba(208, 23, 255,0.7)', 'rgba(255, 104, 46,0.7)']
+var colorsPointerOpacity = ['rgba(0, 255, 0,0.4)', 'rgba(255, 223, 46,0.4)', 'rgba(208, 23, 255,0.4)', 'rgba(255, 104, 46,0.4)']
 
-var mapDelimit = widthCanvas * 0.65
-var paddingLeft = widthCanvas * 0.35 / 2
+var mapDelimit = widthCanvas * 0.63
+var paddingLeft = widthCanvas * 0.37 / 2
 var centerMapH = heightCanvas / 2
 var radio = mapDelimit / 12
 var paddingHeight = centerMapH - (radio * 5)
@@ -15,8 +16,7 @@ var PlayersDetails = []
 
 // PRELOAD IMAGES
 function preload() {
-
-
+    mapa.preload()
     mapa.resources.preload()
 }
 
@@ -86,7 +86,7 @@ function ThrowDice() {
 }
 
 //ADD AN OBJECT
-function Add(val) {
+function Add() {
     mapa.addObject(PlayersDetails[turnIndex])
 }
 
@@ -97,6 +97,7 @@ function setPlayer() {
         PlayersDetails.push({
             name: player,
             color: colorsPointer[i],
+            colorOpacity: colorsPointerOpacity[i],
             houses: [],
             ways: [],
             resources: {

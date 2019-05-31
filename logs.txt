@@ -1,35 +1,3 @@
-ot a deoptimization request on un-deoptimizable method org.slf4j.Logger org.slf4j.LoggerFactory.getLogger(java.lang.Class)
-2019-05-03 21:51:29.589 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method java.lang.Class java.lang.Class.classForName(java.lang.String, boolean, java.lang.ClassLoader)
-2019-05-03 21:51:29.590 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method org.slf4j.Logger org.slf4j.LoggerFactory.getLogger(java.lang.Class)
-2019-05-03 21:51:29.591 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method java.lang.Class java.lang.Class.classForName(java.lang.String, boolean, java.lang.ClassLoader)
-2019-05-03 21:51:29.592 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method org.slf4j.Logger org.slf4j.LoggerFactory.getLogger(java.lang.Class)
-2019-05-03 21:52:00.416 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method java.lang.Class java.lang.Class.classForName(java.lang.String, boolean, java.lang.ClassLoader)
-2019-05-03 21:52:47.132 3962-3962/pe.edu.upc.inkatan W/System.err: SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-2019-05-03 21:52:57.175 3962-3962/pe.edu.upc.inkatan W/System.err: SLF4J: Defaulting to no-operation (NOP) logger implementation
-2019-05-03 21:53:04.852 3962-3962/pe.edu.upc.inkatan W/System.err: SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
-2019-05-03 21:54:11.801 3962-4033/pe.edu.upc.inkatan I/ERROR: llega al open: Host unreachable
-2019-05-03 21:54:11.801 3962-4033/pe.edu.upc.inkatan I/CLOSe: llega al close
-2019-05-03 21:54:27.049 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[])
-2019-05-03 21:54:27.049 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[])
-2019-05-03 21:54:29.588 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method void com.android.internal.os.ZygoteInit.main(java.lang.String[])
-2019-05-03 21:54:29.588 3962-3962/pe.edu.upc.inkatan W/zygote: Got a deoptimization request on un-deoptimizable method void com.android.internal.os.ZygoteInit.main(java.lang.String[])
-2019-05-03 21:54:29.588 3962-3962/pe.edu.upc.inkatan D/AndroidRuntime: Shutting down VM
-2019-05-03 21:56:13.046 3962-3962/pe.edu.upc.inkatan E/AndroidRuntime: FATAL EXCEPTION: main
-    Process: pe.edu.upc.inkatan, PID: 3962
-    org.java_websocket.exceptions.WebsocketNotConnectedException
-        at org.java_websocket.WebSocketImpl.send(WebSocketImpl.java:630)
-        at org.java_websocket.WebSocketImpl.send(WebSocketImpl.java:607)
-        at org.java_websocket.client.WebSocketClient.send(WebSocketClient.java:344)
-        at com.app.mg.connectionlibraryandroid.Implementations.MessageMethods.SendMessageBody(MessageMethods.java:30)
-        at com.app.mg.connectionlibraryandroid.Implementations.MessageMethods.SendMessageBody(MessageMethods.java:42)
-        at pe.edu.upc.inkatan.WebSocketManager.SendMessageBody(WebSocketManager.java:61)
-        at pe.edu.upc.inkatan.Activities.InitialActivity$1.onClick(InitialActivity.java:30)
-        at android.view.View.performClick(View.java:6256)
-        at android.view.View$PerformClick.run(View.java:24701)
-        at android.os.Handler.handleCallback(Handler.java:789)
-        at android.os.Handler.dispatchMessage(Handler.java:98)
-        at android.os.Looper.loop(Looper.java:164)
-        at android.app.ActivityThread.main(ActivityThread.java:6541)
-        at java.lang.reflect.Method.invoke(Native Method)
-        at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
-        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:767)
+mdd 8 puntos
+- 
+vistas + 1

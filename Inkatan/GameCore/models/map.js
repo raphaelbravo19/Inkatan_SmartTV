@@ -192,13 +192,14 @@ function Arista(iIndex, jIndex, start, end) {
     }
 }
 
-function Rombo(origin, resource, number) {
+function Rombo(origin, resource, number, knight) {
     return {
         origin: origin,
         iIndex: origin.iIndex,
         jIndex: origin.jIndex,
         resource: resource,
         number: number,
+        knight: knight,
         getPoint: function (side) {
             switch (side) {
                 case 'left':
@@ -233,22 +234,24 @@ function Rombo(origin, resource, number) {
                 this.origin.posx + radio, this.origin.posy,
                 this.origin.posx, this.origin.posy - radio)
 
+            if (this.number.tag != 7) {
+                textAlign(CENTER, CENTER)
+                fill('black')
+                fill('rgba(0,0,0,0.4)')
+                ellipse(this.origin.posx + (radio * 0.025), this.origin.posy + (radio * 0.025), radio * 0.4, radio * 0.4)
+                fill('lightgrey')
+                stroke('rgba(0,0,0,0.7)')
+                ellipse(this.origin.posx, this.origin.posy, radio * 0.4, radio * 0.4)
+                fill('black')
+                textSize((radio * 0.25));
+                text(this.number.tag, this.origin.posx, this.origin.posy)
+            }
 
-            textAlign(CENTER, CENTER)
-            fill('black')
-            fill('rgba(0,0,0,0.4)')
-            ellipse(this.origin.posx + (radio * 0.025), this.origin.posy + (radio * 0.025), radio * 0.4, radio * 0.4)
-            fill('lightgrey')
-            stroke('rgba(0,0,0,0.7)')
-            ellipse(this.origin.posx, this.origin.posy, radio * 0.4, radio * 0.4)
-            fill('black')
-            textSize((radio * 0.25));
-            text(this.number.tag, this.origin.posx, this.origin.posy)
             //this.origin.draw()
             //origin.draw()
         },
-        drawActive: function () {
-            fill(PlayersDetails[turnIndex].color)
+        drawActive: function (opacity) {
+            fill(opacity ? PlayersDetails[turnIndex].colorOpacity : PlayersDetails[turnIndex].color)
             quad(this.origin.posx - radio, this.origin.posy,
                 this.origin.posx, this.origin.posy + radio,
                 this.origin.posx + radio, this.origin.posy,
@@ -256,6 +259,19 @@ function Rombo(origin, resource, number) {
 
 
             //origin.draw()
+        }
+    }
+}
+
+function Knight(iIndex, jIndex) {
+    return {
+        iIndex: iIndex,
+        jIndex: jIndex,
+        previusiIndex: iIndex,
+        previusjIndex: jIndex,
+        draw: function (list) {
+            image(mapa.images.knight, list[this.iIndex][this.jIndex].origin.posx - (radio * 0.4725 / 2), list[this.iIndex][this.jIndex].origin.posy - (radio / 2), radio * 0.4725, radio)
+
         }
     }
 }
@@ -270,6 +286,8 @@ function Mapa() {
         resources: Resources(),
         numbers: Numbers(),
         ruleta: null,
+        images: {},
+        knight: null,
         changeSelect: function () {
             switch (this.select) {
                 case 'vertice':
@@ -283,6 +301,9 @@ function Mapa() {
                     break;
             }
         },
+        preload: function () {
+            this.images.knight = loadImage('assets/knight.png');
+        },
         setup: function () {
 
             for (var i = 0; i < this.altura; i++) {
@@ -293,7 +314,10 @@ function Mapa() {
                     var number = resource.name == 'desierto' ? {
                         tag: 7
                     } : this.numbers.getRandom()
-                    var rombo = Rombo(origen, resource, number)
+                    if (resource.name == 'desierto') {
+                        this.knight = new Knight(i, j)
+                    }
+                    var rombo = Rombo(origen, resource, number, resource.name == 'desierto')
                     this.setSides(rombo)
                     if (this.listRombos[i] == null) {
                         this.listRombos[i] = []
@@ -391,6 +415,17 @@ function Mapa() {
                     }
                 }
             } else if (this.select == "rombo") {
+                if (this.listRombos[player.indicators.rombo.fi] != null) {
+                    if (this.listRombos[player.indicators.rombo.fi][player.indicators.rombo.fj] != null) {
+                        this.listRombos[this.knight.previusiIndex][this.knight.previusjIndex].knight = false
+                        this.listRombos[this.knight.iIndex][this.knight.jIndex].knight = true
+                        this.knight.previusiIndex = this.knight.iIndex
+                        this.knight.previusjIndex = this.knight.jIndex
+                        this.select = ""
+                        game.ChangeStatus("ROUND")
+                    }
+                }
+
 
             }
         },
@@ -410,6 +445,9 @@ function Mapa() {
         printArista: function (i, j) {
             this.listAristas[i][j].draw()
         },
+        printKnight: function () {
+            this.knight.draw(this.listRombos)
+        },
         printRombo: function (i, j) {
             try {
                 this.listRombos[i][j].drawActive()
@@ -418,17 +456,7 @@ function Mapa() {
             }
 
         },
-        printAll: function () {
-            this.listRombos.map(function (rombos) {
-                rombos.map(function (rombo) {
-                    rombo.draw()
-                })
-            })
-            var list = this.listPoints
-            portos.map(function (item) {
-                list[item.fi][item.fj].drawPorto()
-            })
-
+        spinAnimation: function () {
             if (this.ruleta != null) {
 
                 for (var index = 0; index < this.ruleta.list.length; index++) {
@@ -436,7 +464,7 @@ function Mapa() {
                         if (this.listRombos[this.ruleta.list[index].fi][this.ruleta.list[index].fj]) {
                             var rombo = this.listRombos[this.ruleta.list[index].fi][this.ruleta.list[index].fj]
                             if (this.ruleta.index != index) {
-                                rombo.drawActive()
+                                rombo.drawActive(!this.ruleta.opacity)
                             }
                         }
                     }
@@ -456,11 +484,35 @@ function Mapa() {
                                 that.ruleta.type = "asign"
                             }, 2000)
                             this.ruleta.type = "stop"
+                            this.ruleta.opacity = true
+                            this.ruleta.tempo = 0
                         }
                     }
                 }
+                if (this.ruleta.type == "stop") {
+                    this.ruleta.tempo = this.ruleta.tempo + 1
+                    if (this.ruleta.tempo == 10) {
+                        this.ruleta.opacity = !this.ruleta.opacity
+                        this.ruleta.tempo = 0
+                    }
+
+                }
             }
+        },
+        printAll: function () {
+            this.listRombos.map(function (rombos) {
+                rombos.map(function (rombo) {
+                    rombo.draw()
+                })
+            })
+            var list = this.listPoints
+            portos.map(function (item) {
+                list[item.fi][item.fj].drawPorto()
+            })
+
+            this.spinAnimation()
             dice.draw()
+            this.printKnight()
             /*this.listPoints.map(function (points) {
                 points.map(function (point) {
                     point.draw()
@@ -572,6 +624,8 @@ function Mapa() {
                 if (this.listRombos[newfi][newfj]) {
                     player.indicators.rombo.fi = newfi
                     player.indicators.rombo.fj = newfj
+                    this.knight.iIndex = newfi
+                    this.knight.jIndex = newfj
                 }
 
             } else if (side == 'up') {
@@ -580,6 +634,8 @@ function Mapa() {
                 if (this.listRombos[newfi][newfj]) {
                     player.indicators.rombo.fi = newfi
                     player.indicators.rombo.fj = newfj
+                    this.knight.iIndex = newfi
+                    this.knight.jIndex = newfj
                 }
             } else if (side == 'left') {
                 var newfj = player.indicators.rombo.fi % 2 == 0 ? player.indicators.rombo.fj : player.indicators.rombo.fj - 1
@@ -587,6 +643,8 @@ function Mapa() {
                 if (this.listRombos[newfi][newfj]) {
                     player.indicators.rombo.fi = newfi
                     player.indicators.rombo.fj = newfj
+                    this.knight.iIndex = newfi
+                    this.knight.jIndex = newfj
                 }
             } else if (side == 'right') {
                 var newfj = player.indicators.rombo.fi % 2 == 0 ? player.indicators.rombo.fj + 1 : player.indicators.rombo.fj
@@ -594,6 +652,8 @@ function Mapa() {
                 if (this.listRombos[newfi][newfj]) {
                     player.indicators.rombo.fi = newfi
                     player.indicators.rombo.fj = newfj
+                    this.knight.iIndex = newfi
+                    this.knight.jIndex = newfj
                 }
             }
         },
@@ -849,7 +909,13 @@ function Dice() {
         throwDice: function () {
             if (game.status == "ROUND") {
                 this.value = [1 + Math.floor(Math.random() * 100) % 6, 1 + Math.floor(Math.random() * 100) % 6]
-                mapa.asignResources(this.value[0] + this.value[1])
+                if (this.value[0] + this.value[1] != 7) {
+                    mapa.asignResources(this.value[0] + this.value[1])
+                } else {
+                    game.ChangeStatus('KNIGHT')
+                    PlayersDetails[turnIndex].indicators.rombo.fi = mapa.knight.iIndex
+                    PlayersDetails[turnIndex].indicators.rombo.fj = mapa.knight.jIndex
+                }
             }
         }
     }
