@@ -912,6 +912,13 @@ function Dice() {
                 if (this.value[0] + this.value[1] != 7) {
                     mapa.asignResources(this.value[0] + this.value[1])
                 } else {
+                    var newMessage = {
+                        player: PlayersDetails[turnIndex].name,
+                        action: "knight"
+                    }
+                    sendMessageServer(
+                        newMessage
+                    )
                     game.ChangeStatus('KNIGHT')
                     PlayersDetails[turnIndex].indicators.rombo.fi = mapa.knight.iIndex
                     PlayersDetails[turnIndex].indicators.rombo.fj = mapa.knight.jIndex
