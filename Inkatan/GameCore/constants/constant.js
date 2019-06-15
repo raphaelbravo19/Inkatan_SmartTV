@@ -156,7 +156,19 @@ function Entries(valueObject) {
     return newObj;
 
 }
-
+var card_names = {
+    "GRAN_INCA": "GRAN_INCA",
+    "AGRICULTOR": "AGRICULTOR",
+    "CURACA": "CURACA",
+    "DIOS_DE_LOS_DADOS": "DIOS_DE_LOS_DADOS",
+    "TUCUY": "TUCUY",
+    "RUNA": "RUNA",
+    "MINERIA": "MINERIA",
+    "OBRERO": "OBRERO",
+    "VICTORY":"VICTORY",
+    "LONGROUTE":"LONGROUTE"
+    //"TUCUY": "TUCUY",
+}
 var positionsVertice = [{
         fi: 1,
         fj: 0
@@ -193,21 +205,27 @@ var positionsAristas = [{
 ]
 
 var portos = [{
+    resource:'potato',
     fi: 1,
     fj: 1
 }, {
+    resource:'wool',
     fi: 1,
     fj: 4
 }, {
+    resource:'wood',
     fi: 9,
     fj: 1
 }, {
+    resource:'gold',
     fi: 9,
     fj: 4
 }, {
+    resource:'quinoa',
     fi: 7,
     fj: 0
 }, {
+    resource:'stone',
     fi: 3,
     fj: 5
 }]

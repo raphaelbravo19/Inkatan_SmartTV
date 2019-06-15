@@ -1,5 +1,6 @@
 function Vertice(iIndex, jIndex, posx, posy) {
     return {
+        id: iIndex+'-'+jIndex,
         iIndex: iIndex,
         jIndex: jIndex,
         posx: posx,
@@ -162,6 +163,7 @@ function Vertice(iIndex, jIndex, posx, posy) {
 
 function Arista(iIndex, jIndex, start, end) {
     return {
+        id: iIndex+'-'+jIndex,
         iIndex: iIndex,
         jIndex: jIndex,
         start: start,
@@ -194,6 +196,7 @@ function Arista(iIndex, jIndex, start, end) {
 
 function Rombo(origin, resource, number, knight) {
     return {
+        id: origin.iIndex+'-'+origin.jIndex,
         origin: origin,
         iIndex: origin.iIndex,
         jIndex: origin.jIndex,
@@ -270,7 +273,7 @@ function Knight(iIndex, jIndex) {
         previusiIndex: iIndex,
         previusjIndex: jIndex,
         draw: function (list) {
-            image(mapa.images.knight, list[this.iIndex][this.jIndex].origin.posx - (radio * 0.4725 / 2), list[this.iIndex][this.jIndex].origin.posy - (radio / 2), radio * 0.4725, radio)
+            image(mapa.images.knight, list[this.iIndex][this.jIndex].origin.posx - (radio * 0.4725 / 2),-(radio*0.7)+ list[this.iIndex][this.jIndex].origin.posy - (radio / 2), radio * 0.4725, radio)
 
         }
     }
@@ -380,12 +383,40 @@ function Mapa() {
                         for (var index = 0; index < portos.length; index++) {
                             //console.log(portos[index].fi, player.indicators.vertice.fi)
                             if (portos[index].fi == player.indicators.vertice.fi && portos[index].fj == player.indicators.vertice.fj) {
-                                canTake = false
+                                canTake =  game.status!="START"
                             }
 
                         }
                     }
+                    if(game.status=="BUILD" && canTake){
+                        var tempCan=false
+                        for(var index = 0; index < player.ways.length; index++){
+                           if(player.ways[index].start.id==player.indicators.vertice.fi+'-'+player.indicators.vertice.fj ||
+                           player.ways[index].end.id==player.indicators.vertice.fi+'-'+player.indicators.vertice.fj ){
+                            tempCan=true
+                           }
+                        }
+                        canTake=tempCan
+                    }
                     if (canTake) {
+                        //REDUCE RESOURCES
+                        
+                        if(game.status=="BUILD"){
+                            var message = {
+                                name: PlayersDetails[turnIndex].name,
+                                resource:[{
+                                    name: 'wood',
+                                    amount: -2,
+                                },{
+                                    name: 'stone',
+                                    amount: -2,
+                                },]
+                            }
+                            ResourcesController([message])
+                        }
+                        //sendMessageServer(
+                          //  newMessage
+                       // )
                         this.listPoints[player.indicators.vertice.fi][player.indicators.vertice.fj].taken = turnIndex
                         player.houses.push(this.listPoints[player.indicators.vertice.fi][player.indicators.vertice.fj])
 
@@ -409,9 +440,26 @@ function Mapa() {
                     }
 
                     if (canSet) {
+                        //REDUCE RESOURCES
+                        if(game.status=="BUILD"){
+                            var message = {
+                                name: PlayersDetails[turnIndex].name,
+                                resource:[{
+                                    name: 'wood',
+                                    amount: -1,
+                                },{
+                                    name: 'stone',
+                                    amount: -1,
+                                },]
+                            }
+                            ResourcesController([message])
+                        }
+
                         this.listAristas[player.indicators.arista.fi][player.indicators.arista.fj].taken = turnIndex
                         player.ways.push(this.listAristas[player.indicators.arista.fi][player.indicators.arista.fj])
-
+                        player.longRoad = GetLongRoadPlayer(player.id)
+                        ProcessLongRoad()
+                        console.log(player)
                     }
                 }
             } else if (this.select == "rombo") {
@@ -422,7 +470,10 @@ function Mapa() {
                         this.knight.previusiIndex = this.knight.iIndex
                         this.knight.previusjIndex = this.knight.jIndex
                         this.select = ""
+
                         game.ChangeStatus("ROUND")
+
+                        PaseTurno()
                     }
                 }
 
@@ -478,7 +529,7 @@ function Mapa() {
                         //}
                         this.ruleta.index = this.ruleta.index == 3 ? 0 : this.ruleta.index + 1
 
-                        if (this.ruleta.pivot >= 50) {
+                        if (this.ruleta.pivot >= 30) {
                             var that = this
                             setTimeout(function () {
                                 that.ruleta.type = "asign"
@@ -712,12 +763,10 @@ function Mapa() {
                         }
                     }
                 }
-                Entries(listresources).map(function (item) {
-                    PlayersDetails[turnIndex].resources[item[0]] = PlayersDetails[turnIndex].resources[item[0]] + item[1]
-                })
+               
 
-                var newMessage = {
-                    player: PlayersDetails[turnIndex].name,
+                var message = {
+                    name: PlayersDetails[turnIndex].name,
                     resource: Entries(listresources).map(function (item) {
                         return {
                             name: item[0],
@@ -725,9 +774,8 @@ function Mapa() {
                         }
                     })
                 }
-                sendMessageServer(
-                    newMessage
-                )
+                ResourcesController([message])
+                
                 //console.log(listresources)
                 this.ruleta = null
                 //console.log(turnIndex)
@@ -766,12 +814,9 @@ function Mapa() {
                             }
                         }
 
-                        Entries(listresources).map(function (item) {
-                            PlayersDetails[turnIndex].resources[item[0]] = PlayersDetails[turnIndex].resources[item[0]] + item[1]
-                        })
-                        console.log(listresources)
-                        var newMessage = {
-                            player: PlayersDetails[turnIndex].name,
+                        
+                        var message = {
+                            name: PlayersDetails[turnIndex].name,
                             resource: Entries(listresources).map(function (item) {
                                 return {
                                     name: item[0],
@@ -779,9 +824,7 @@ function Mapa() {
                                 }
                             })
                         }
-                        sendMessageServer(
-                            newMessage
-                        )
+                        ResourcesController([message])
                         this.ruleta = null
 
                         if (back) {
@@ -808,14 +851,30 @@ function Mapa() {
             })
             //console.log(eleme)
             elements.map(function (value) {
-
-                if (result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type]) {
-                    result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type] = result[PlayersDetails[parseInt(value.point.taken)].name][value.resource.type] + 1
-                } else {
-                    result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type] = 1
+                if (listValidate[value.point.iIndex][value.point.jIndex].taken.toString() != '') {
+                    if (result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type]) {
+                        console.log(result)
+                        console.log(value)
+                        result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type] = result[PlayersDetails[parseInt(value.point.taken)].name][value.resource.type] + 1
+                    } else {
+                        result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type] = 1
+                    }
                 }
             })
-
+            var messageArray = []
+            Entries(result).map(function (value) {
+                var newMessage = {
+                    name: value[0],
+                    resource: Entries(value[1]).map(function (item) {
+                        return {
+                            name: item[0],
+                            amount: item[1]
+                        }
+                    })
+                }
+                messageArray.push(newMessage)
+            })
+            ResourcesController(messageArray)
             console.log(result)
             PaseTurno()
         },
@@ -912,16 +971,10 @@ function Dice() {
                 if (this.value[0] + this.value[1] != 7) {
                     mapa.asignResources(this.value[0] + this.value[1])
                 } else {
-                    var newMessage = {
-                        player: PlayersDetails[turnIndex].name,
-                        action: "knight"
+                    var message = {
+                        name: PlayersDetails[turnIndex].name
                     }
-                    sendMessageServer(
-                        newMessage
-                    )
-                    game.ChangeStatus('KNIGHT')
-                    PlayersDetails[turnIndex].indicators.rombo.fi = mapa.knight.iIndex
-                    PlayersDetails[turnIndex].indicators.rombo.fj = mapa.knight.jIndex
+                    KnightController(message)
                 }
             }
         }

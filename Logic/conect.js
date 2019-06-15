@@ -24,7 +24,7 @@ function connect(url) {
 
 function sendMessageServer(texto) {
     console.log(texto)
-    //webSocket.ws.send(JSON.stringify(texto));
+    webSocket.ws.send(JSON.stringify(texto));
 
 }
 
@@ -84,14 +84,8 @@ function update(cursor) {
         var obj
         console.log(cursor)
         switch (true) {
-            case cursor === 'one':
-                setPlayers(1);
-                break;
             case cursor === 'two':
                 setPlayers(2);
-                break;
-            case cursor === 'three':
-                setPlayers(3);
                 break;
             case cursor === 'four':
                 setPlayers(4);
@@ -110,6 +104,24 @@ function update(cursor) {
             case cursor === 'dice':
                 ThrowDice()
                 break;
+            case cursor.indexOf("Card") != -1:
+                obj = JSON.parse(cursor)
+                console.log("aqui")
+                callCard(obj.action, obj.player)
+            case cursor.indexOf("PUERTO") != -1:
+                obj = JSON.parse(cursor)
+                IsPort( obj.player)
+            case cursor.indexOf("INTERCAMBIOPUERTO") != -1:
+                obj = JSON.parse(cursor)
+                ExchangeOut(obj)
+            case cursor.indexOf("build") != -1:
+                obj = JSON.parse(cursor)
+                SetBuildMode({player:obj.player, type:obj.tipo,amount:1})
+                break;
+            case cursor.indexOf("CancelBuild") != -1:
+                    //obj = JSON.parse(cursor)
+                    CancelBuild()
+                    break;
             case cursor.indexOf("PlayerName") != -1:
                 obj = JSON.parse(cursor)
                 changeName(obj.PlayerName)
