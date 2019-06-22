@@ -165,7 +165,8 @@ var card_names = {
     "RUNA": "RUNA",
     "MINERIA": "MINERIA",
     "OBRERO": "OBRERO",
-    "VICTORY":"VICTORY"
+    "VICTORY":"VICTORY",
+    "LONGROUTE":"LONGROUTE"
     //"TUCUY": "TUCUY",
 }
 var positionsVertice = [{

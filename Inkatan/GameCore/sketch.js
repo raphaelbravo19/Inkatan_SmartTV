@@ -106,8 +106,11 @@ function SetBuildMode(data){
         previous:PlayersDetails[mapPlayers[data.player]][data.type=='h'?'houses':'ways'].length,
         amount: data.amount
     }
+    
     game.ChangeStatus('BUILD')
+    //alert(data.type=='h'? "vertice": 'arista')
     mapa.select=data.type=='h'? "vertice": 'arista'
+    console.log(game)
 }
 //CALL MOVE FUNCTIONS
 function Move(val) {
@@ -132,7 +135,12 @@ function Add(obj) {
 //CONFIGURE PLAYERS
 function setPlayer() {
     var players = ActualParameters.namesPlayers.split(',')
+    
     players.map(function (player, i) {
+        var specialcards={}
+        Entries(card_names).map(function(name){
+            specialcards[name[1]]=0
+        })
         mapPlayers[player] = i
         PlayersDetails.push({
             id:i,
@@ -158,10 +166,11 @@ function setPlayer() {
                     fj: 0
                 }
             },
+            specialcards,
             longRoad: 0
         })
     })
-    console.log(mapPlayers)
+    console.log(PlayersDetails)
 }
 
 function Struct(){
@@ -205,7 +214,7 @@ function GetLongRoadPlayer(index){
     })
     var lastVal=0
     var response =0
-    for (let i = 0; i < posibleInit.length; i++) {
+    for (var i = 0; i < posibleInit.length; i++) {
         var init = posibleInit[i]
         if(!visited[i]){
             response= DFS(init, visited,treeWays,0,-1)
@@ -278,7 +287,7 @@ function DFS(index, visited, treeWays, cant,source){
 function ProcessLongRoad(){
     var ext = 0;
     var playerLong = '';
-    for (let i = 0; i < PlayersDetails.length; i++) {
+    for (var i = 0; i < PlayersDetails.length; i++) {
         if(ext<PlayersDetails[i].longRoad && PlayersDetails[i].longRoad>=4){
             ext=PlayersDetails[i].longRoad
             playerLong= i
@@ -316,7 +325,6 @@ function ProcessLongRoad(){
                 amount: 1,
             })
             longRoad={}
-
             longRoad.dist=ext;
             longRoad.player=playerLong;
             console.log(longRoad)
@@ -328,7 +336,7 @@ function IsPort(playerName){
     
     var player = mapPlayers[playerName]
     var ports= []
-    for (let i = 0; i < PlayersDetails[player].houses.length; i++) {
+    for (var i = 0; i < PlayersDetails[player].houses.length; i++) {
         portos.map(function(item){
             if(PlayersDetails[player].houses[i].id==item.fi+'-'+item.fj){
                 ports.push(item.resource)
@@ -339,9 +347,8 @@ function IsPort(playerName){
 }
 function ExchangeOut(data){
     const { player, input , output} = data
-    var newMessage = {
+    var value = {
         player: player,
-        action:'resources',
         resource:[{
             name: input,
             amount: -4,
@@ -350,12 +357,58 @@ function ExchangeOut(data){
             amount: 1,
         }]
     }
-    PlayersDetails[mapPlayers[player]].resources[input]=PlayersDetails[mapPlayers[player]].resources[input]-4
-    PlayersDetails[mapPlayers[player]].resources[output]=PlayersDetails[mapPlayers[player]].resources[output]+1
-    sendMessageServer(
-        newMessage
-    )
-    //sendMessageServer({ports, player:PlayersDetails[player].name})
+    ResourcesController([value])
 }
+function ResourcesController(data){ //[{name,list}]
+    for (var i = 0; i < data.length; i++) {
+        var {name, resource} = data[i]
+        console.log(data)
+        for (var j = 0; j < resource.length; j++) {
+            console.log(resource)
+            PlayersDetails[mapPlayers[name]].resources[resource[j].name] =
+            PlayersDetails[mapPlayers[name]].resources[resource[j].name]+resource[j].amount
+        }
 
+        var message = {
+            player: name,
+            action:'resources',
+            resource:resource
+        }
+        sendMessageServer(message)
+    }
+}
+function SpecialCardsController(data){ //[{name,list}]
+    for (var i = 0; i < data.length; i++) {
+        var {name, resources} = data[i]
+
+        for (var j = 0; j < resources.length; j++) {
+            PlayersDetails[mapPlayers[name]].resources[resources[i].name] =
+            PlayersDetails[mapPlayers[name]].resources[resources[i].name]+resources[i].amount
+        }
+
+        var message = {
+            player: name,
+            action:'specialcards',
+            resource:resources
+        }
+        sendMessageServer(message)
+    }
+}
+function KnightController(data){ //{name}
+    var {name}= data
+    var message = {
+        player: name,
+        action: "knight"
+    }
+    sendMessageServer(message)
+    game.ChangeStatus('KNIGHT')
+    PlayersDetails[mapPlayers[name]].indicators.rombo.fi = mapa.knight.iIndex
+    PlayersDetails[mapPlayers[name]].indicators.rombo.fj = mapa.knight.jIndex
+}
+function CancelBuild(){
+    game.data={}
+    game.ChangeStatus('ROUND')
+    //alert(data.type=='h'? "vertice": 'arista')
+    mapa.select=''
+}
 

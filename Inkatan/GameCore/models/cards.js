@@ -19,39 +19,31 @@ function Cards() {
             } else if (type == card_names.OBRERO) {
                 this.obrero_action(player)
             }
+            console.log(PlayersDetails)
         },
         gran_inca_action: function (player) {
 
             for (let i = 0; i < PlayersDetails.length; i++) {
                 if (i != player) {
                     var cant = PlayersDetails[i].resources.gold > 2 ? 2 : PlayersDetails[i].resources.gold
-                    PlayersDetails[i].resources.gold = PlayersDetails[i].resources.gold - cant
-                    PlayersDetails[player].resources.gold = PlayersDetails[player].resources.gold + cant
                     var newMessage = {
-                        player: PlayersDetails[i].name,
-                        action:"resources",
+                        name: PlayersDetails[i].name,
                         resource: [{
                             name: 'gold',
                             amount: cant * -1
                         }]
                     }
                     var secondMessage = {
-                        player: PlayersDetails[player].name,
-                        action:"resources",
+                        name: PlayersDetails[player].name,
                         resource: [{
                             name: 'gold',
                             amount: cant
                         }]
                     }
-                    sendMessageServer(
-                        newMessage
-                    )
-                    sendMessageServer(
-                        secondMessage
-                    )
+                    ResourcesController([newMessage,secondMessage])
                 }
             }
-            console.log(PlayersDetails)
+            
         },
         agricultor_action: function (player) {
 
@@ -59,13 +51,8 @@ function Cards() {
                 if (i != player) {
                     var cantPotato = PlayersDetails[i].resources.potato > 2 ? 2 : PlayersDetails[i].resources.potato
                     var cantQuinoa = cantPotato < 2 ? PlayersDetails[i].resources.quinoa > 2 - cantPotato ? 1 : PlayersDetails[i].resources.quinoa : 0
-                    PlayersDetails[i].resources.potato = PlayersDetails[i].resources.potato - cantPotato
-                    PlayersDetails[i].resources.quinoa = PlayersDetails[i].resources.quinoa - cantQuinoa
-                    PlayersDetails[player].resources.potato = PlayersDetails[player].resources.potato + cantPotato
-                    PlayersDetails[player].resources.quinoa = PlayersDetails[player].resources.quinoa + cantQuinoa
                     var newMessage = {
-                        player: PlayersDetails[i].name,
-                        action:"resources",
+                        name: PlayersDetails[i].name,
                         resource: [{
                             name: 'potato',
                             amount: cantPotato * -1
@@ -75,8 +62,7 @@ function Cards() {
                         }]
                     }
                     var secondMessage = {
-                        player: PlayersDetails[player].name,
-                        action:"resources",
+                        name: PlayersDetails[player].name,
                         resource: [{
                             name: 'potato',
                             amount: cantPotato
@@ -85,53 +71,40 @@ function Cards() {
                             amount: cantQuinoa
                         }]
                     }
-                    sendMessageServer(
-                        newMessage
-                    )
-                    sendMessageServer(
-                        secondMessage
-                    )
+
+                    ResourcesController([newMessage,secondMessage])
                 }
             }
-            console.log(PlayersDetails)
+            
         },
         curaca_action: function (player) {
 
             for (let i = 0; i < PlayersDetails.length; i++) {
                 if (i != player) {
                     var cant = PlayersDetails[i].resources.wood > 2 ? 2 : PlayersDetails[i].resources.wood
-                    PlayersDetails[i].resources.wood = PlayersDetails[i].resources.wood - cant
-                    PlayersDetails[player].resources.wood = PlayersDetails[player].resources.wood + cant
                     var newMessage = {
-                        player: PlayersDetails[i].name,
-                        action:"resources",
+                        name: PlayersDetails[i].name,
                         resource: [{
                             name: 'wood',
                             amount: cant * -1
                         }]
                     }
                     var secondMessage = {
-                        player: PlayersDetails[player].name,
-                        action:"resources",
+                        name: PlayersDetails[player].name,
                         resource: [{
                             name: 'wood',
                             amount: cant
                         }]
                     }
-                    sendMessageServer(
-                        newMessage
-                    )
-                    sendMessageServer(
-                        secondMessage
-                    )
+                    ResourcesController([newMessage,secondMessage])
                 }
             }
-            console.log(PlayersDetails)
+            
         },
         dios_de_los_dados_action: function (player) {
 
 
-            console.log(PlayersDetails)
+            
         },
         tucuy_action: function (player) {
             game.data = {
@@ -144,16 +117,10 @@ function Cards() {
         },
         knight_action: function (player) {
             console.log(player)
-            var newMessage = {
-                player: PlayersDetails[turnIndex].name,
-                action: "knight"
+            var data = {
+                name: PlayersDetails[turnIndex].name
             }
-            sendMessageServer(
-                newMessage
-            )
-            game.ChangeStatus('KNIGHT')
-            PlayersDetails[turnIndex].indicators.rombo.fi = mapa.knight.iIndex
-            PlayersDetails[turnIndex].indicators.rombo.fj = mapa.knight.jIndex
+           KnightController(data)
         },
         mineria_action: function (player) {
             var cant = {}
@@ -171,17 +138,14 @@ function Cards() {
             })
             console.log(cant)
             console.log(Entries(cant).length)
-            var newMessage = {
-                player: PlayersDetails[turnIndex].name,
-                action:"resources",
+            var message = {
+                name: PlayersDetails[turnIndex].name,
                 resource: [{
                     name: 'stone',
                     amount: Entries(cant).length
                 }]
             }
-            sendMessageServer(
-                newMessage
-            )
+            ResourcesController([message])
             /*var newMessage = {
                 player: PlayersDetails[player].name,
                 action: "knight"

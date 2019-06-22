@@ -321,7 +321,7 @@ function Knight(iIndex, jIndex) {
         previusiIndex: iIndex,
         previusjIndex: jIndex,
         draw: function (list) {
-            image(mapa.images.knight, list[this.iIndex][this.jIndex].origin.posx - (radio * 0.4725 / 2), list[this.iIndex][this.jIndex].origin.posy - (radio*1.2), radio * 0.4725, radio)
+            image(mapa.images.knight, list[this.iIndex][this.jIndex].origin.posx - (radio * 0.4725 / 2),-(radio*0.7)+ list[this.iIndex][this.jIndex].origin.posy - (radio / 2), radio * 0.4725, radio)
 
         }
     }
@@ -449,23 +449,19 @@ function Mapa() {
                     }
                     if (canTake) {
                         //REDUCE RESOURCES
-                        PlayersDetails[turnIndex].resources.stone=PlayersDetails[turnIndex].resources.stone-2
-                        PlayersDetails[turnIndex].resources.wool=PlayersDetails[turnIndex].resources.wool-2
-                        PlayersDetails[turnIndex].resources.wood=PlayersDetails[turnIndex].resources.wood-2
                         
-                        var newMessage = {
-                            player: PlayersDetails[turnIndex].name,
-                            
-                            resource:[{
-                                name: 'wood',
-                                amount: -2,
-                            },{
-                                name: 'wool',
-                                amount: -2,
-                            },{
-                                name: 'stone',
-                                amount: -2,
-                            },]
+                        if(game.status=="BUILD"){
+                            var message = {
+                                name: PlayersDetails[turnIndex].name,
+                                resource:[{
+                                    name: 'wood',
+                                    amount: -2,
+                                },{
+                                    name: 'stone',
+                                    amount: -2,
+                                },]
+                            }
+                            ResourcesController([message])
                         }
                         //sendMessageServer(
                           //  newMessage
@@ -494,6 +490,20 @@ function Mapa() {
 
                     if (canSet) {
                         //REDUCE RESOURCES
+                        if(game.status=="BUILD"){
+                            var message = {
+                                name: PlayersDetails[turnIndex].name,
+                                resource:[{
+                                    name: 'wood',
+                                    amount: -1,
+                                },{
+                                    name: 'stone',
+                                    amount: -1,
+                                },]
+                            }
+                            ResourcesController([message])
+                        }
+
                         this.listAristas[player.indicators.arista.fi][player.indicators.arista.fj].taken = turnIndex
                         player.ways.push(this.listAristas[player.indicators.arista.fi][player.indicators.arista.fj])
                         player.longRoad = GetLongRoadPlayer(player.id)
@@ -806,13 +816,10 @@ function Mapa() {
                         }
                     }
                 }
-                Entries(listresources).map(function (item) {
-                    PlayersDetails[turnIndex].resources[item[0]] = PlayersDetails[turnIndex].resources[item[0]] + item[1]
-                })
+               
 
-                var newMessage = {
-                    player: PlayersDetails[turnIndex].name,
-                    action:"resources",
+                var message = {
+                    name: PlayersDetails[turnIndex].name,
                     resource: Entries(listresources).map(function (item) {
                         return {
                             name: item[0],
@@ -820,9 +827,8 @@ function Mapa() {
                         }
                     })
                 }
-                sendMessageServer(
-                    newMessage
-                )
+                ResourcesController([message])
+                
                 //console.log(listresources)
                 this.ruleta = null
                 //console.log(turnIndex)
@@ -861,13 +867,9 @@ function Mapa() {
                             }
                         }
 
-                        Entries(listresources).map(function (item) {
-                            PlayersDetails[turnIndex].resources[item[0]] = PlayersDetails[turnIndex].resources[item[0]] + item[1]
-                        })
-                        console.log(listresources)
-                        var newMessage = {
-                            player: PlayersDetails[turnIndex].name,
-                            action:"resources",
+                        
+                        var message = {
+                            name: PlayersDetails[turnIndex].name,
                             resource: Entries(listresources).map(function (item) {
                                 return {
                                     name: item[0],
@@ -875,9 +877,7 @@ function Mapa() {
                                 }
                             })
                         }
-                        sendMessageServer(
-                            newMessage
-                        )
+                        ResourcesController([message])
                         this.ruleta = null
 
                         if (back) {
@@ -914,10 +914,10 @@ function Mapa() {
                     }
                 }
             })
+            var messageArray = []
             Entries(result).map(function (value) {
                 var newMessage = {
-                    player: value[0],
-                    action:"resources",
+                    name: value[0],
                     resource: Entries(value[1]).map(function (item) {
                         return {
                             name: item[0],
@@ -925,10 +925,9 @@ function Mapa() {
                         }
                     })
                 }
-                sendMessageServer(
-                    newMessage
-                )
+                messageArray.push(newMessage)
             })
+            ResourcesController(messageArray)
             console.log(result)
             PaseTurno()
         },
@@ -1025,16 +1024,10 @@ function Dice() {
                 if (this.value[0] + this.value[1] != 7) {
                     mapa.asignResources(this.value[0] + this.value[1])
                 } else {
-                    var newMessage = {
-                        player: PlayersDetails[turnIndex].name,
-                        action: "knight"
+                    var message = {
+                        name: PlayersDetails[turnIndex].name
                     }
-                    sendMessageServer(
-                        newMessage
-                    )
-                    game.ChangeStatus('KNIGHT')
-                    PlayersDetails[turnIndex].indicators.rombo.fi = mapa.knight.iIndex
-                    PlayersDetails[turnIndex].indicators.rombo.fj = mapa.knight.jIndex
+                    KnightController(message)
                 }
             }
         }
