@@ -121,8 +121,10 @@ function Move(val) {
 }
 
 //DICE ACTION
-function ThrowDice() {
-    dice.throwDice()
+function ThrowDice(obj) {
+    if(obj.player==PlayersDetails[turnIndex].name){
+        dice.throwDice()
+    }
 }
 
 //ADD AN OBJECT
