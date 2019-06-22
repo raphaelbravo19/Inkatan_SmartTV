@@ -7,10 +7,13 @@ function modificarExpansion(mas) {
 		if(expansionPorcentaje>5) expansionPorcentaje-=5
 	}*/
 	document.getElementById('percentValue').innerHTML = mas + '%';
+	sendMessageServer({
+		action:"STARTGAME"
+	})
 	setTimeout(function () {
 		location.replace(parseUrl(location.href, "/GameCore",
 			[]))
 		gameStarting = false
-	}, 1000)
+	}, 100)
 
 }

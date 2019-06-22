@@ -3,13 +3,18 @@ function Game() {
         status: 'START',
         iterator: 1,
         pivot: 1,
+        data: {},
         Game: function (obj, players) {
             if (this.status == "START") {
                 this.START_PROCESS(obj, players)
             } else if (this.status == "ROUND") {
                 this.ROUND_PROCESS()
+            } else if (this.status == "CARD") {
+                this.CARD_PROCESS()
             } else if (this.status == "KNIGHT") {
                 this.KNIGHT_PROCESS()
+            } else if (this.status == "BUILD") {
+                this.BUILD_PROCESS()
             }
 
         },
@@ -53,6 +58,25 @@ function Game() {
         },
         ROUND_PROCESS: function () {
 
+        },
+        BUILD_PROCESS: function () {
+            if(this.data!={}){
+                if(PlayersDetails[this.data.player][this.data.type=='h'?'houses':'ways'].length-1==this.data.previous){
+                    this.status="ROUND"
+                    this.data={}
+                    mapa.select=''
+                    
+                }
+            }
+        },
+        CARD_PROCESS: function () {
+            mapa.select = 'arista'
+            if (PlayersDetails[this.data.index].ways.length == this.data.actualData + this.data.cant) {
+                mapa.select = ''
+                game.data = {}
+                this.ChangeStatus("ROUND")
+                console.log(PlayersDetails)
+            }
         },
         KNIGHT_PROCESS: function () {
             mapa.select = "rombo"

@@ -24,7 +24,7 @@ function connect(url) {
 
 function sendMessageServer(texto) {
     console.log(texto)
-    //webSocket.ws.send(JSON.stringify(texto));
+    webSocket.ws.send(JSON.stringify(texto));
 
 }
 
@@ -96,8 +96,9 @@ function update(cursor) {
             case cursor === 'four':
                 setPlayers(4);
                 break;
-            case cursor === 'add':
-                Add();
+            case cursor.indexOf("add") != -1:
+                obj = JSON.parse(cursor)
+                Add(obj);
                 break;
             case cursor === 'expand':
                 location.replace(parseUrl(location.href, "/ModeExpansion",
@@ -110,6 +111,19 @@ function update(cursor) {
             case cursor === 'dice':
                 ThrowDice()
                 break;
+            case cursor.indexOf("Card") != -1:
+                obj = JSON.parse(cursor)
+                console.log("aqui")
+                callCard(obj.action, obj.player)
+            case cursor.indexOf("PUERTO") != -1:
+                obj = JSON.parse(cursor)
+                IsPort( obj.player)
+            case cursor.indexOf("INTERCAMBIOPUERTO") != -1:
+                obj = JSON.parse(cursor)
+                ExchangeOut(obj)
+            case cursor.indexOf("build") != -1:
+                    obj = JSON.parse(cursor)
+                    SetBuildMode({player:obj.player, type:obj.tipo,amount:1})
             case cursor.indexOf("PlayerName") != -1:
                 obj = JSON.parse(cursor)
                 changeName(obj.PlayerName)
@@ -136,8 +150,10 @@ function update(cursor) {
 
         if (cursor == "start") {
 
-        } else if (cursor == "up" || cursor == "down" || cursor == "left" || cursor == "right") {
-            Move(cursor)
+        } else if (cursor.indexOf("move") != -1) {
+            obj = JSON.parse(cursor)
+            Move(obj)
+            break;
         } else if (cursor == "next-list") {
 
             goToScreen(
