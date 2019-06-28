@@ -108,12 +108,15 @@ function update(cursor) {
                 obj = JSON.parse(cursor)
                 console.log("aqui")
                 callCard(obj.action, obj.player)
+                break;
             case cursor.indexOf("PUERTO") != -1:
                 obj = JSON.parse(cursor)
                 IsPort( obj.player)
+                break;
             case cursor.indexOf("INTERCAMBIOPUERTO") != -1:
                 obj = JSON.parse(cursor)
                 ExchangeOut(obj)
+                break;
             case cursor.indexOf("build") != -1:
                 obj = JSON.parse(cursor)
                 SetBuildMode({player:obj.player, type:obj.tipo,amount:1})

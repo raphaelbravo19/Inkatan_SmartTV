@@ -291,17 +291,29 @@ function ProcessLongRoad(){
         if(longRoad.dist<ext){
             if(longRoad.player!=playerLong){
                 console.log("one")
-                alert(PlayersDetails[longRoad.player].name+" quitar carta")
+                //alert(PlayersDetails[longRoad.player].name+" quitar carta")
+                /*SpecialCardsController([{
+                    name: PlayersDetails[longRoad.player].name,
+                    specialcards:[
+                        {name: card_names.LONGROUTE, amount: -1}
+                    ]
+                }])*/
                 sendMessageServer({
                 player: PlayersDetails[longRoad.player].name,
-                action: "LongRoute",
+                action: "specialCard",
                 amount:-1
             })
             console.log("two")
-            alert(PlayersDetails[playerLong].name+" dar carta")
+            /*alert(PlayersDetails[playerLong].name+" dar carta")
+            SpecialCardsController([{
+                name: PlayersDetails[playerLong].name,
+                specialcards:[
+                    {name: card_names.LONGROUTE, amount: 1}
+                ]
+            }])*/
             sendMessageServer({
                 player: PlayersDetails[playerLong].name,
-                action: "LongRoute",
+                action: "specialCard",
                 amount:1
             })
             }
@@ -314,13 +326,19 @@ function ProcessLongRoad(){
     }else{
         if(4<=ext){
             console.log("three")
+            /*SpecialCardsController([{
+                name: PlayersDetails[playerLong].name,
+                specialcards:[
+                    {name: card_names.LONGROUTE, amount: 1}
+                ]
+            }])*/
             sendMessageServer({
                 player: PlayersDetails[playerLong].name,
-                action:"LongRoute",
+                action:"specialCard",
                 amount: 1,
             })
             longRoad={}
-            alert(PlayersDetails[playerLong].name+" dar carta")
+           // alert(PlayersDetails[playerLong].name+" dar carta")
             longRoad.dist=ext;
             longRoad.player=playerLong;
             console.log(longRoad)
@@ -375,20 +393,21 @@ function ResourcesController(data){ //[{name,list}]
 }
 function SpecialCardsController(data){ //[{name,list}]
     for (var i = 0; i < data.length; i++) {
-        var {name, resources} = data[i]
+        var {name, specialcards} = data[i]
 
-        for (var j = 0; j < resources.length; j++) {
-            PlayersDetails[mapPlayers[name]].resources[resources[i].name] =
-            PlayersDetails[mapPlayers[name]].resources[resources[i].name]+resources[i].amount
+        for (var j = 0; j < specialcards.length; j++) {
+            PlayersDetails[mapPlayers[name]].specialcards[specialcards[i].name] =
+            PlayersDetails[mapPlayers[name]].specialcards[specialcards[i].name]+specialcards[i].amount
         }
 
         var message = {
             player: name,
             action:'specialcards',
-            resource:resources
+            specialcards:specialcards
         }
         sendMessageServer(message)
     }
+    console.log(PlayersDetails)
 }
 function KnightController(data){ //{name}
     var {name}= data

@@ -851,11 +851,11 @@ function Mapa() {
             })
             //console.log(eleme)
             elements.map(function (value) {
-                if (listValidate[value.point.iIndex][value.point.jIndex].taken.toString() != '') {
+                if (listValidate[value.point.iIndex][value.point.jIndex].taken.toString().length>0) {
                     if (result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type]) {
                         console.log(result)
                         console.log(value)
-                        result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type] = result[PlayersDetails[parseInt(value.point.taken)].name][value.resource.type] + 1
+                        result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type] = result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type] + 1
                     } else {
                         result[PlayersDetails[parseInt(listValidate[value.point.iIndex][value.point.jIndex].taken)].name][value.resource.type] = 1
                     }
@@ -882,9 +882,10 @@ function Mapa() {
             var listOrigin = []
             var listRequest = []
             var tabs = ["left", "right", "up", "down"]
+            var knight =  this.knight
             this.listRombos.map(function (rombos) {
                 rombos.map(function (rombo) {
-                    if (rombo.number.tag == val) {
+                    if (rombo.number.tag == val &&(rombo.iIndex!=knight.iIndex ||rombo.jIndex!=knight.jIndex)) {
                         listOrigin.push(rombo)
                     }
                 })
