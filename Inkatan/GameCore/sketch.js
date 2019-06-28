@@ -17,6 +17,7 @@ var longRoad=''
 var mapPlayers = {}
 var PlayersDetails = []
 var cards = Cards()
+var modal = null
 // PRELOAD IMAGES
 function preload() {
     mapa.preload()
@@ -42,6 +43,9 @@ function draw() {
     mapa.printObjects(PlayersDetails)
     game.Game(mapa, PlayersDetails)
     showPointer()
+    if(modal){
+        
+    }
 }
 
 //SHOW MAP POINTER
