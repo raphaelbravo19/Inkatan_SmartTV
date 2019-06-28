@@ -2,22 +2,24 @@ function Cards() {
     return {
 
         action: function (type, player) {
-            if (type == card_names.GRAN_INCA) {
-                this.gran_inca_action(player)
-            } else if (type == card_names.AGRICULTOR) {
-                this.agricultor_action(player)
-            } else if (type == card_names.CURACA) {
-                this.curaca_action(player)
-            } else if (type == card_names.DIOS_DE_LOS_DADOS) {
-                this.dios_de_los_dados_action(player)
-            } else if (type == card_names.TUCUY) {
-                this.tucuy_action(player)
-            } else if (type == card_names.RUNA) {
-                this.knight_action(player)
-            } else if (type == card_names.MINERIA) {
-                this.mineria_action(player)
-            } else if (type == card_names.OBRERO) {
-                this.obrero_action(player)
+            if(player==turnIndex){
+                if (type == card_names.GRAN_INCA) {
+                    this.gran_inca_action(player)
+                } else if (type == card_names.AGRICULTOR) {
+                    this.agricultor_action(player)
+                } else if (type == card_names.CURACA) {
+                    this.curaca_action(player)
+                } else if (type == card_names.DIOS_DE_LOS_DADOS) {
+                    this.dios_de_los_dados_action(player)
+                } else if (type == card_names.TUCUY) {
+                    this.tucuy_action(player)
+                } else if (type == card_names.RUNA) {
+                    this.knight_action(player)
+                } else if (type == card_names.MINERIA) {
+                    this.mineria_action(player)
+                } else if (type == card_names.OBRERO) {
+                    this.obrero_action(player)
+                }
             }
             console.log(PlayersDetails)
         },

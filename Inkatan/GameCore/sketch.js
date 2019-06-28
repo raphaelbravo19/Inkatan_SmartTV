@@ -2,6 +2,7 @@ var widthCanvas = $(window).width() * 1;
 var heightCanvas = $(window).height();
 
 var colorsPointer = ['rgba(0, 255, 0,0.7)', 'rgba(255, 223, 46,0.7)', 'rgba(208, 23, 255,0.7)', 'rgba(255, 104, 46,0.7)']
+var colorsPointerTotal = ['rgba(0, 255, 0,1)', 'rgba(255, 223, 46,1)', 'rgba(208, 23, 255,1)', 'rgba(255, 104, 46,1)']
 var colorsPointerOpacity = ['rgba(0, 255, 0,0.4)', 'rgba(255, 223, 46,0.4)', 'rgba(208, 23, 255,0.4)', 'rgba(255, 104, 46,0.4)']
 
 var mapDelimit = widthCanvas * 0.60
@@ -16,6 +17,7 @@ var longRoad=''
 var mapPlayers = {}
 var PlayersDetails = []
 var cards = Cards()
+var modal = null
 // PRELOAD IMAGES
 function preload() {
     mapa.preload()
@@ -41,6 +43,9 @@ function draw() {
     mapa.printObjects(PlayersDetails)
     game.Game(mapa, PlayersDetails)
     showPointer()
+    if(modal){
+        
+    }
 }
 
 //SHOW MAP POINTER
@@ -113,17 +118,24 @@ function SetBuildMode(data){
 }
 //CALL MOVE FUNCTIONS
 function Move(val) {
-    mapa.move(PlayersDetails[turnIndex], val)
+    if(val.player==PlayersDetails[turnIndex].name){
+        mapa.move(PlayersDetails[turnIndex], val.type)
+    }
+    
 }
 
 //DICE ACTION
-function ThrowDice() {
-    dice.throwDice()
+function ThrowDice(obj) {
+    if(obj.player==PlayersDetails[turnIndex].name){
+        dice.throwDice()
+    }
 }
 
 //ADD AN OBJECT
-function Add() {
+function Add(obj) {
+    if(obj.player==PlayersDetails[turnIndex].name){
     mapa.addObject(PlayersDetails[turnIndex])
+    }
 }
 
 //CONFIGURE PLAYERS
@@ -139,6 +151,7 @@ function setPlayer() {
         PlayersDetails.push({
             id:i,
             name: player,
+            colorTotal: colorsPointerTotal[i],
             color: colorsPointer[i],
             colorOpacity: colorsPointerOpacity[i],
             houses: [],

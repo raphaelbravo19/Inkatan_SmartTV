@@ -49,7 +49,10 @@ var gameStarting = false;
 var readyIndex = 0;
 
 
-
+function addtemp(){
+	console.log(1)
+	changeName("Jesus")
+}
 function setReady(index) {
 	var toChange = ready[index]
 	ready[index] = !toChange
@@ -73,7 +76,12 @@ function setReady(index) {
 		listNames.map(function (item) {
 			strNames += ',' + item
 		})
+		sendMessageServer({
+			action:"ALLREADY"
+		})
+		
 		setTimeout(function () {
+			
 			location.replace(parseUrl(location.href, "/GameMode",
 				[{
 						name: "namesPlayers",
@@ -85,6 +93,6 @@ function setReady(index) {
 					}
 				]))
 			gameStarting = false
-		}, 1000)
+		}, 100)
 	}
 }

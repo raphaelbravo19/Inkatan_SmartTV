@@ -85,7 +85,24 @@ function Resources() {
         }
     }
 }
+function Modal(){
+    return{
+        message:'',
+        status: false,
+        duration:0,
+        show: function(message,duration){
+            this.message=message
+            this.duration=duration
+            this.status=true
+            setTimeout(function(){
+                this.status=false
+            })
+        },
+        draw: function(){
 
+        }
+    }
+}
 function Numbers() {
     return {
         tags: [{

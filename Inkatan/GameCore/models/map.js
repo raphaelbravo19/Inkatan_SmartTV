@@ -157,7 +157,19 @@ function Vertice(iIndex, jIndex, posx, posy) {
             rect(this.posx - radio * 0.125, this.posy + radio * 0.20, radio * 0.25, radio * 0.10)
             //endShape()
             pop()
-        }
+        },
+        drawHouse: function (value) {
+            push()
+            let turn=value.id==turnIndex
+            stroke('rgba(0,0,0,'+(turn?'0.5':'0.5')+')')
+            strokeWeight(radio * 0.05)
+            fill(value ? turn?value.colorTotal:value.colorOpacity : PlayersDetails[turnIndex].color)
+            //textSize(32);
+            ellipse(this.posx, this.posy, radio * 0.35, radio * 0.35)
+            //fill(0, 0, 0);
+            //text(this.iIndex.toString() + this.jIndex.toString(), this.posx, this.posy)
+            pop()
+        },
     }
 }
 
@@ -169,6 +181,29 @@ function Arista(iIndex, jIndex, start, end) {
         start: start,
         end: end,
         taken: '',
+        drawWay: function (value) {
+            //ellipse(this.posx, this.posy, 50,10)
+            let turn=value.id==turnIndex
+            fill(value ? turn?value.colorTotal:value.colorOpacity : PlayersDetails[turnIndex].color)
+
+            var angulo = Math.atan((this.start.posy - this.end.posy) / (this.start.posx - this.end.posx))
+            push()
+            stroke('rgba(0,0,0,'+(turn?'0.5':'0.5')+')')
+            strokeWeight(radio * 0.05)
+            translate((this.start.posx + this.end.posx) / 2, (this.start.posy + this.end.posy) / 2)
+            rotate(angulo)
+            //console.log(ind, ind2)
+            //line(objLine[0].posx, objLine[0].posy, objLine[1].posx, objLine[1].posy)
+            //text(angulo, (objLine[0].posx + objLine[1].posx) / 2, (objLine[0].posy + objLine[1].posy) / 2)
+            rectMode(CENTER)
+            rect(0, 0, radio * 0.8, radio * 0.2, 3, 3, 3, 3)
+            //image(img,-sideTriangle*0.6/2, -15, sideTriangle*0.6, 30)
+            pop()
+            textAlign(CENTER, CENTER)
+            fill('black')
+
+            //text(this.iIndex+'-'+this.jIndex,(this.start.posx+this.end.posx)/2,(this.start.posy+this.end.posy)/2)
+        },
         draw: function (value) {
             //ellipse(this.posx, this.posy, 50,10)
             fill(value ? value : PlayersDetails[turnIndex].color)
@@ -176,7 +211,7 @@ function Arista(iIndex, jIndex, start, end) {
             var angulo = Math.atan((this.start.posy - this.end.posy) / (this.start.posx - this.end.posx))
             push()
             stroke('rgba(255,255,255,0.5)')
-            strokeWeight(radio * 0.02)
+            strokeWeight(radio * 0.05)
             translate((this.start.posx + this.end.posx) / 2, (this.start.posy + this.end.posy) / 2)
             rotate(angulo)
             //console.log(ind, ind2)
@@ -253,6 +288,19 @@ function Rombo(origin, resource, number, knight) {
             //this.origin.draw()
             //origin.draw()
         },
+        drawSelection: function (opacity) {
+            push()
+            noFill()
+            stroke('white')
+            strokeWeight(radio*0.07)
+            quad(this.origin.posx - radio, this.origin.posy,
+                this.origin.posx, this.origin.posy + radio,
+                this.origin.posx + radio, this.origin.posy,
+                this.origin.posx, this.origin.posy - radio)
+
+            pop()
+            //origin.draw()
+        },
         drawActive: function (opacity) {
             fill(opacity ? PlayersDetails[turnIndex].colorOpacity : PlayersDetails[turnIndex].color)
             quad(this.origin.posx - radio, this.origin.posy,
@@ -291,6 +339,7 @@ function Mapa() {
         ruleta: null,
         images: {},
         knight: null,
+        actualSections:[],
         changeSelect: function () {
             switch (this.select) {
                 case 'vertice':
@@ -483,10 +532,10 @@ function Mapa() {
         printObjects: function (players) {
             players.map(function (player) {
                 player.houses.map(function (house) {
-                    house.draw(player.color)
+                    house.drawHouse(player)
                 })
                 player.ways.map(function (way) {
-                    way.draw(player.color)
+                    way.drawWay(player)
                 })
             })
         },
@@ -557,12 +606,16 @@ function Mapa() {
                 })
             })
             var list = this.listPoints
-            portos.map(function (item) {
-                list[item.fi][item.fj].drawPorto()
-            })
+            
 
             this.spinAnimation()
             dice.draw()
+            this.actualSections.map(function (rombo) {
+                rombo.drawSelection()
+            })
+            portos.map(function (item) {
+                list[item.fi][item.fj].drawPorto()
+            })
             this.printKnight()
             /*this.listPoints.map(function (points) {
                 points.map(function (point) {
@@ -890,7 +943,7 @@ function Mapa() {
                     }
                 })
             })
-
+            this.actualSections=listOrigin
             listOrigin.map(function (origin) {
                 tabs.map(function (tab) {
                     listRequest.push({

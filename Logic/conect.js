@@ -9,16 +9,22 @@ function connect(url) {
 
         //divMessage = document.getElementById('listDisc');
 
-        cursors = obj.body.message;
+        cursors = obj.body?obj.body.message:null;
         //console.log(cursors)
         if (cursors) update(cursors);
 
     };
+    webSocket.ws.onopen= function(){
+        var element = $("#loading")
+        if(element) element.remove()
+    }
     //setTimeout(()=>{
     //  webSocket.ws.send('{"body":{"message":"aqui"}}')
     //},2000)
 
-    webSocket.ws.onclose = function () {};
+    webSocket.ws.onclose = function () {
+        alert("closed")
+    };
 
 };
 
@@ -90,8 +96,9 @@ function update(cursor) {
             case cursor === 'four':
                 setPlayers(4);
                 break;
-            case cursor === 'add':
-                Add();
+            case cursor.indexOf("add") != -1:
+                obj = JSON.parse(cursor)
+                Add(obj);
                 break;
             case cursor === 'expand':
                 location.replace(parseUrl(location.href, "/ModeExpansion",
@@ -101,8 +108,9 @@ function update(cursor) {
                 location.replace(parseUrl(location.href, "/ModePoints",
                     []))
                 break;
-            case cursor === 'dice':
-                ThrowDice()
+            case cursor.indexOf("dice") != -1:
+                    obj = JSON.parse(cursor)
+                ThrowDice(obj)
                 break;
             case cursor.indexOf("Card") != -1:
                 obj = JSON.parse(cursor)
@@ -151,8 +159,10 @@ function update(cursor) {
 
         if (cursor == "start") {
 
-        } else if (cursor == "up" || cursor == "down" || cursor == "left" || cursor == "right") {
-            Move(cursor)
+        } else if (cursor.indexOf("move") != -1) {
+            obj = JSON.parse(cursor)
+            Move(obj)
+            //break;
         } else if (cursor == "next-list") {
 
             goToScreen(
@@ -162,11 +172,11 @@ function update(cursor) {
                     value: lenPlayers.toString()
                 }])
 
-        } else if (cursor.indexOf("player") != -1) {
+        } else if (cursor.indexOf("player") != -1 && !turnIndex) {
 
             var newName = cursor.substr(cursor.indexOf("player") + 7)
             console.log(newName)
-            playerReady(newName).bind(returnContext())
+            //playerReady(newName).bind(returnContext())
 
         } else if (cursor == "next-game") {
 
