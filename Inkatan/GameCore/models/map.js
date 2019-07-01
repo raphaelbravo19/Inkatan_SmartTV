@@ -411,8 +411,10 @@ function Mapa() {
         },
         addObject: function (player) {
             if (this.select == "vertice") {
-                if (this.listPoints[player.indicators.vertice.fi][player.indicators.vertice.fj].taken == '') {
+                var reason=''
+                if (this.listPoints[player.indicators.vertice.fi][player.indicators.vertice.fj].taken.toString() == '') {
                     var canTake = true
+                    
                     var listAdj = this.listPoints[player.indicators.vertice.fi][player.indicators.vertice.fj].getAdyacents()
                     var tempListPoints = this.listPoints
                     listAdj.map(function (ad) {
@@ -421,6 +423,7 @@ function Mapa() {
                                 if (tempListPoints[ad.fi][ad.fj] != null) {
                                     var tempTaken = tempListPoints[ad.fi][ad.fj].taken
                                     if (tempTaken.toString() != '') {
+                                        reason="No puedes colocar un poblado adyacente a otro"
                                         canTake = false
                                     }
                                 }
@@ -432,7 +435,9 @@ function Mapa() {
                         for (var index = 0; index < portos.length; index++) {
                             //console.log(portos[index].fi, player.indicators.vertice.fi)
                             if (portos[index].fi == player.indicators.vertice.fi && portos[index].fj == player.indicators.vertice.fj) {
+
                                 canTake =  game.status!="START"
+                                reason="No puedes colocar un poblado en un punto de intercambio"
                             }
 
                         }
@@ -445,6 +450,7 @@ function Mapa() {
                             tempCan=true
                            }
                         }
+                        reason="No puedes colocar un poblado sin una carretera al lado"
                         canTake=tempCan
                     }
                     if (canTake) {
@@ -463,21 +469,34 @@ function Mapa() {
                             }
                             ResourcesController([message])
                         }
+
                         //sendMessageServer(
                           //  newMessage
                        // )
                         this.listPoints[player.indicators.vertice.fi][player.indicators.vertice.fj].taken = turnIndex
                         player.houses.push(this.listPoints[player.indicators.vertice.fi][player.indicators.vertice.fj])
+                        if(ActualParameters.gamemode=="expansion"){
+                            if(100*player.houses.length/68>=parseInt(ActualParameters.gamevalue)){
+                                modal.show("El ganador es "+player.name,10)
+                            }
+                        }
 
+                    }else{
+                        modal.show(reason,2)
                     }
+                }else{
+                    reason="No puedes colocar un poblado donde ya hay uno construido"
+                    modal.show(reason,2)
                 }
             } else if (this.select == "arista") {
+                var reason = ''
                 if (this.listAristas[player.indicators.arista.fi][player.indicators.arista.fj].taken.toString() == '') {
                     var current = this.listAristas[player.indicators.arista.fi][player.indicators.arista.fj]
                     var canSet = this.listPoints[current.start.iIndex][current.start.jIndex].taken.toString() != '' && this.listPoints[current.start.iIndex][current.start.jIndex].taken.toString() == turnIndex.toString() ||
                         this.listPoints[current.end.iIndex][current.end.jIndex].taken.toString() == turnIndex.toString();
-
+                    
                     if (!canSet) {
+                        
                         player.ways.map(function (way) {
                             if ((way.start.iIndex == current.start.iIndex && way.start.jIndex == current.start.jIndex) ||
                                 (way.start.iIndex == current.end.iIndex && way.start.jIndex == current.end.jIndex) ||
@@ -486,6 +505,9 @@ function Mapa() {
                                 canSet = true
                             }
                         })
+                        if(!canSet){
+                            reason = 'Solo puedes construir una trocha al lado de otra o de un poblado'
+                        }
                     }
 
                     if (canSet) {
@@ -509,7 +531,12 @@ function Mapa() {
                         player.longRoad = GetLongRoadPlayer(player.id)
                         ProcessLongRoad()
                         console.log(player)
+                    }else{
+                        modal.show(reason,2)
                     }
+                }else{
+                    reason="No puedes construir una trocha donde ya hay una construida"
+                    modal.show(reason,2)
                 }
             } else if (this.select == "rombo") {
                 if (this.listRombos[player.indicators.rombo.fi] != null) {

@@ -17,7 +17,7 @@ var longRoad=''
 var mapPlayers = {}
 var PlayersDetails = []
 var cards = Cards()
-var modal = null
+var modal = Modal()
 // PRELOAD IMAGES
 function preload() {
     mapa.preload()
@@ -34,6 +34,10 @@ function setup() {
     background(100, 180, 100)
     mapa.setup()
     setPlayer()
+    /* sendMessageServer({
+        action:"TURNO",
+        name: PlayersDetails[turnIndex].name
+    }) */
 }
 
 //DRAW
@@ -43,9 +47,7 @@ function draw() {
     mapa.printObjects(PlayersDetails)
     game.Game(mapa, PlayersDetails)
     showPointer()
-    if(modal){
-        
-    }
+    modal.draw()
 }
 
 //SHOW MAP POINTER

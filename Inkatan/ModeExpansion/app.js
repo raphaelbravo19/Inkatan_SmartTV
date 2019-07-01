@@ -8,11 +8,20 @@ function modificarExpansion(mas) {
 	}*/
 	document.getElementById('percentValue').innerHTML = mas + '%';
 	sendMessageServer({
-		action:"STARTGAME"
+		action:"CONNECTION",
+		name: "Inicia el juego"
 	})
+	
+	
 	setTimeout(function () {
+		sendMessageServer({
+			action:"STARTGAME"
+		})
 		location.replace(parseUrl(location.href, "/GameCore",
-			[]))
+			[
+				{name:"gamemode", value: "expansion"},
+				{name:"gamevalue", value: mas},
+			]))
 		gameStarting = false
 	}, 100)
 

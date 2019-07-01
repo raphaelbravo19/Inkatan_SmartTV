@@ -29,21 +29,37 @@ function setPlayers(valueCursor) {
 	$("#messageWaiting").remove();
 	for (var i = 0; i < valueCursor; i++) {
 		$("#playersContainer").append(playersIcons[i]);
+		tasks.push(
+			{name: ("Esperando al jugador #"+i), status:false},
+		)
 		ready.push(false)
 	}
+	tasks.push(
+		{name: "Esperando la seleccion de modo de juego", status:false},
+	)
+	tasks.push(
+		{name: "Esperando la seleccion del nivel de modo de juego", status:false},
+	)
 	numberPlayers = valueCursor
 }
 
 var listNames = []
-
+var tasks=[]
 function changeName(name) {
 	if (lenPlayers < numberPlayers) {
+		tasks[lenPlayers].status=true
+		tasks[lenPlayers].name=name+" conectado"
 		lenPlayers++;
 		$('#playerName' + lenPlayers).text(name)
 		listNames.push(name)
 		$('#player' + lenPlayers).removeClass("disabled")
 		setReady(lenPlayers - 1)
 	}
+	console.log(tasks)
+	sendMessageServer({
+		action:"CONNECTION",
+		name: tasks[lenPlayers-1].name
+	})
 }
 var gameStarting = false;
 var readyIndex = 0;

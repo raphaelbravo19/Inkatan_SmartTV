@@ -31,6 +31,10 @@ function PaseTurno() {
 	}
 	//alert(turnIndex)
 	$('#avatar' + (turnIndex + 1)).addClass("turnActive");
+	sendMessageServer({
+		action:"TURNO",
+		player: PlayersDetails[turnIndex].name
+	})
 }
 
 function BackTurno() {
@@ -43,4 +47,8 @@ function BackTurno() {
 	}
 	//alert(turnIndex)
 	$('#avatar' + (turnIndex + 1)).addClass("turnActive");
+	sendMessageServer({
+		action:"TURNO",
+		player: PlayersDetails[turnIndex].name
+	})
 }

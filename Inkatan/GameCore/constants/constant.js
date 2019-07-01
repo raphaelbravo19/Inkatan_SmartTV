@@ -91,15 +91,33 @@ function Modal(){
         status: false,
         duration:0,
         show: function(message,duration){
-            this.message=message
-            this.duration=duration
-            this.status=true
-            setTimeout(function(){
-                this.status=false
-            })
+            if(!this.status){
+                this.message=message
+                this.duration=duration
+                this.status=true
+                console.log(message)
+                var that = this
+                setTimeout(function(){
+                    console.log("finish")
+                    that.status=false
+                },duration*1000)
+            }
         },
         draw: function(){
-
+            if(this.status){
+                console.log("printing")
+                push()
+                rectMode(CENTER)
+                stroke(255)
+                strokeWeight(radio*0.05)
+                fill('rgba(80,80,100,1)')
+                rect(widthCanvas/2,heightCanvas/2,widthCanvas*0.4, heightCanvas*0.2)
+                strokeWeight(1)
+                textSize(radio*0.5)
+                fill('white')
+                text(this.message,widthCanvas/2,heightCanvas/2,widthCanvas*0.35,heightCanvas*0.2)
+                pop()
+            }
         }
     }
 }

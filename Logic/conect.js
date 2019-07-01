@@ -17,13 +17,23 @@ function connect(url) {
     webSocket.ws.onopen= function(){
         var element = $("#loading")
         if(element) element.remove()
+        if(PlayersDetails!=null){
+            if(ActualParameters.namesPlayers!=null){
+            var players = ActualParameters.namesPlayers.split(',')
+            console.log(players)
+        sendMessageServer({
+            action:"TURNO",
+            player: players[turnIndex]
+        })
+    }
+    }
     }
     //setTimeout(()=>{
     //  webSocket.ws.send('{"body":{"message":"aqui"}}')
     //},2000)
 
     webSocket.ws.onclose = function () {
-        alert("closed")
+        //alert("closed")
     };
 
 };
@@ -101,10 +111,18 @@ function update(cursor) {
                 Add(obj);
                 break;
             case cursor === 'expand':
+                    sendMessageServer({
+                        action:"CONNECTION",
+                        name: "Modo expansion seleccionado"
+                    })
                 location.replace(parseUrl(location.href, "/ModeExpansion",
                     []))
                 break;
             case cursor === 'points':
+                    sendMessageServer({
+                        action:"CONNECTION",
+                        name: "Modo puntos seleccionado"
+                    })
                 location.replace(parseUrl(location.href, "/ModePoints",
                     []))
                 break;
@@ -188,11 +206,18 @@ function update(cursor) {
         } else if (cursor.indexOf("name")) {
             changeName(cursor.substr(5))
         } else if (cursor == "expansion") {
-
+            sendMessageServer({
+                action:"CONNECTION",
+                name: "Modo expansion seleccionado"
+            })
             location.replace(parseUrl(location.href, "ModeExpansion/",
                 []))
 
         } else if (cursor == "puntos") {
+            sendMessageServer({
+                action:"CONNECTION",
+                name: "Modo puntos seleccionado"
+            })
             location.replace(parseUrl(location.href, "ModePoints/",
                 []))
         } else if (cursor == "mas") {
