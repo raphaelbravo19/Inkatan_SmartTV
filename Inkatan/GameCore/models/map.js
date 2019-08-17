@@ -337,6 +337,7 @@ function Mapa() {
         resources: Resources(),
         numbers: Numbers(),
         ruleta: null,
+        asignAnimation:null,
         images: {},
         knight: null,
         actualSections:[],
@@ -624,6 +625,28 @@ function Mapa() {
                     }
 
                 }
+                if(this.ruleta.type=="asign_animation"){
+                    if(this.asignAnimation!=null){
+                        var pass = false;
+                        for (let i = 0; i < this.asignAnimation.list.length; i++) {
+                            if(this.asignAnimation.list[i].draw()){
+                                pass=true
+                            }
+                            
+                        }
+                        if(!pass){
+                            this.ruleta = null
+
+                        if (this.asignAnimation.back) {
+                            this.asignAnimation=null
+                            BackTurno()
+                        } else {
+                            game.ChangeStatus("ROUND")
+                            this.select = ''
+                        }
+                        }
+                    }
+                }
             }
         },
         printAll: function () {
@@ -879,11 +902,13 @@ function Mapa() {
                 } else {
                     if (this.ruleta.type == "asign") {
                         var listresources = {}
+                        var listasignanimation= [];
                         for (var index = 0; index < listAround.length; index++) {
                             if (this.listRombos[listAround[index].fi]) {
                                 if (this.listRombos[listAround[index].fi][listAround[index].fj]) {
                                     var rombo = this.listRombos[listAround[index].fi][listAround[index].fj]
                                     if (rombo.resource.type !== 'dessert' && index != this.ruleta.index) {
+                                        listasignanimation.push(MoveItem(rombo.origin.posx,rombo.origin.posy,PlayersDetails[turnIndex].avatar.posx,PlayersDetails[turnIndex].avatar.posy,20,rombo.resource.icon));
                                         if (listresources[rombo.resource.type]) {
                                             listresources[rombo.resource.type] = listresources[rombo.resource.type] + 1
                                         } else {
@@ -905,14 +930,20 @@ function Mapa() {
                             })
                         }
                         ResourcesController([message])
-                        this.ruleta = null
+                        this.ruleta.type="asign_animation"
+                        this.asignAnimation={
+                            player:turnIndex,
+                            list:listasignanimation,
+                            back:back
+                        }
+                        /*this.ruleta = null
 
                         if (back) {
                             BackTurno()
                         } else {
                             game.ChangeStatus("ROUND")
                             this.select = ''
-                        }
+                        }*/
                     }
                 }
             }
@@ -1059,5 +1090,43 @@ function Dice() {
                 }
             }
         }
+    }
+}
+
+function MoveItem(posx,posy,fposx,fposy,milliseconds,icon){
+
+    return {
+        posx:posx,
+        posy:posy,
+        fposx:fposx,
+        fposy:fposy,
+        milliseconds:milliseconds,
+        deltax:(-1)*(posx-fposx) / (milliseconds),
+        deltay:(-1)*(posy-fposy) / (milliseconds),
+        image:icon,
+        counter:0,
+        draw:function(){
+            fill('black')
+            var vel=1;
+            this.counter=this.counter+1;
+            quad(this.posx - radio, this.posy,
+                this.posx, this.posy + radio,
+                this.posx + radio, this.posy,
+                this.posx, this.posy - radio)
+                
+                image(this.image, this.posx - radio, this.posy - radio, 2 * radio, 2 * radio)
+            
+            if(this.counter<milliseconds+4){
+                if(!(this.counter<milliseconds-4)){
+                        vel=0.5
+                }
+                    this.posx=this.posx+(this.deltax*vel)
+                    this.posy= this.posy+(this.deltay*vel)
+                return true
+            }else{
+return false
+            }
+        }
+
     }
 }

@@ -1,6 +1,6 @@
 @font-face {
 	font-family: Kirsty;
-	src: url(../fonts/kirsty.regular.ttf);
+	src: url(./styles/fonts/kirsty.regular.ttf);
 }
 
 body {
@@ -30,18 +30,6 @@ body {
 	font-size: 10rem
 }
 
-.uid {
-	font-family: Kirsty;
-	color: black;
-	font-size: 2rem;
-	margin-bottom: 3rem;
-}
-
-.triangleBtn {
-	border-left: 12rem solid transparent;
-	border-right: 12rem solid transparent;
-	border-top: 9rem solid green;
-}
 
 .btnText {
 	font-family: Kirsty;
@@ -54,7 +42,7 @@ body {
 
 #searching {
 	font-family: Kirsty;
-	color: red;
+	color: rgb(92, 21, 21);
 	font-size: 2rem;
 	margin-top: 3rem;
 }

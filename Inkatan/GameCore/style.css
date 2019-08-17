@@ -73,7 +73,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: green;
+	background-color: rgba(9, 82, 9, 1);
 	opacity: 0.4
 }
 

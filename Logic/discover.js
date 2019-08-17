@@ -10,7 +10,7 @@ function getServers() {
 	}
 }
 var ipConnected = ''
-
+	
 function avaliableServersToDiv() {
 	console.log("[discoveryHelper] Avaliable: servers:\n");
 	var addOptions = "";

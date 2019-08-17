@@ -2,9 +2,9 @@ var webSocket = {};
 var obj;
 
 function connect(url) {
-    webSocket.ws = new WebSocket(url);
+    //webSocket.ws = new WebSocket(url);
 
-    webSocket.ws.onmessage = function (e) {
+    /*webSocket.ws.onmessage = function (e) {
         obj = JSON.parse(e.data);
 
         //divMessage = document.getElementById('listDisc');
@@ -13,8 +13,8 @@ function connect(url) {
         //console.log(cursors)
         if (cursors) update(cursors);
 
-    };
-    webSocket.ws.onopen= function(){
+    };*/
+    /*webSocket.ws.onopen= function(){
         var element = $("#loading")
         if(element) element.remove()
         if(PlayersDetails!=null){
@@ -34,13 +34,13 @@ function connect(url) {
 
     webSocket.ws.onclose = function () {
         //alert("closed")
-    };
+    };*/
 
 };
 
 function sendMessageServer(texto) {
     console.log(texto)
-    webSocket.ws.send(JSON.stringify(texto));
+    //webSocket.ws.send(JSON.stringify(texto));
 
 }
 

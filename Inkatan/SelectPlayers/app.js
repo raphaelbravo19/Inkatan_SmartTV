@@ -1,9 +1,9 @@
 //import SendMessages from '../../Util/constants';
 var playersIcons = [
 	'<div id="player1" class="itemPlayer"><div class="playerNumber">1</div><div class="avatar"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName1" class="playerName">Esperando...</div></div>',
-	'<div id="player2" class="itemPlayer disabled"><div class="playerNumber">2</div><div class="avatar" style="background: #ffdf2e"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName2" class="playerName">Esperando...</div></div>',
-	'<div id="player3" class="itemPlayer disabled"><div class="playerNumber">3</div><div class="avatar" style="background: #d017ff"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName3" class="playerName">Esperando...</div></div>',
-	'<div id="player4" class="itemPlayer disabled"><div class="playerNumber">4</div><div class="avatar" style="background: #ff682e"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName4" class="playerName">Esperando...</div></div>'
+	'<div id="player2" class="itemPlayer disabled"><div class="playerNumber">2</div><div class="avatar" style="background: rgb(171, 154, 31)"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName2" class="playerName">Esperando...</div></div>',
+	'<div id="player3" class="itemPlayer disabled"><div class="playerNumber">3</div><div class="avatar" style="background: rgb(126, 34, 140)"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName3" class="playerName">Esperando...</div></div>',
+	'<div id="player4" class="itemPlayer disabled"><div class="playerNumber">4</div><div class="avatar" style="background: rgb(140, 89, 34)"><img class="user" src="../../Assets/icons/user.png" /></div><div id="playerName4" class="playerName">Esperando...</div></div>'
 ]
 
 $(document).ready(function () {

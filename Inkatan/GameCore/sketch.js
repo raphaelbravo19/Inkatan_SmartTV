@@ -1,9 +1,9 @@
-var widthCanvas = $(window).width() * 1;
+var widthCanvas = $(window).width();
 var heightCanvas = $(window).height();
 
-var colorsPointer = ['rgba(0, 255, 0,0.7)', 'rgba(255, 223, 46,0.7)', 'rgba(208, 23, 255,0.7)', 'rgba(255, 104, 46,0.7)']
-var colorsPointerTotal = ['rgba(0, 255, 0,1)', 'rgba(255, 223, 46,1)', 'rgba(208, 23, 255,1)', 'rgba(255, 104, 46,1)']
-var colorsPointerOpacity = ['rgba(0, 255, 0,0.4)', 'rgba(255, 223, 46,0.4)', 'rgba(208, 23, 255,0.4)', 'rgba(255, 104, 46,0.4)']
+var colorsPointer = ['rgba(9, 82, 9,0.7)', 'rgba(171, 154, 31,0.7)', 'rgba(126, 34, 140,0.7)', 'rgba(140, 89, 34,0.7)']
+var colorsPointerTotal = ['rgba(9, 82, 9,1)', 'rgba(171, 154, 31,1)', 'rgba(126, 34, 140,1)', 'rgba(140, 89, 34,1)']
+var colorsPointerOpacity = ['rgba(9, 82, 9,0.4)', 'rgba(171, 154, 31,0.4)', 'rgba(126, 34, 140,0.4)', 'rgba(140, 89, 34,0.4)']
 
 var mapDelimit = widthCanvas * 0.60
 var paddingLeft = widthCanvas * 0.40 / 2
@@ -18,10 +18,12 @@ var mapPlayers = {}
 var PlayersDetails = []
 var cards = Cards()
 var modal = Modal()
+var backImage;
 // PRELOAD IMAGES
 function preload() {
     mapa.preload()
     mapa.resources.preload()
+    backImage=loadImage('assets/background.jpg');
 }
 //CALL CARD
 function callCard(typeCard, playerCard) {
@@ -43,6 +45,7 @@ function setup() {
 //DRAW
 function draw() {
     background(100, 180, 100)
+    image(backImage, 0, 0, widthCanvas, heightCanvas)
     mapa.printAll()
     mapa.printObjects(PlayersDetails)
     game.Game(mapa, PlayersDetails)
@@ -143,7 +146,7 @@ function Add(obj) {
 //CONFIGURE PLAYERS
 function setPlayer() {
     var players = ActualParameters.namesPlayers.split(',')
-    
+    console.log(players);
     players.map(function (player, i) {
         var specialcards={}
         Entries(card_names).map(function(name){
@@ -158,6 +161,10 @@ function setPlayer() {
             colorOpacity: colorsPointerOpacity[i],
             houses: [],
             ways: [],
+            avatar: i==0?{posx:widthCanvas*0.1,posy:heightCanvas*0.2}
+            :i==1?{posx:widthCanvas*0.1,posy:heightCanvas*0.8}
+            :i==2?{posx:widthCanvas*0.9,posy:heightCanvas*0.2}
+            :{posx:widthCanvas*0.9,posy:heightCanvas*0.8},
             resources: {
                 stone: 0,
                 wool: 0,
@@ -441,4 +448,5 @@ function CancelBuild(){
     //alert(data.type=='h'? "vertice": 'arista')
     mapa.select=''
 }
+
 
